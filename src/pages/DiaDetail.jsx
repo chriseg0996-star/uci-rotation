@@ -6,12 +6,16 @@ import Button from '../components/Button.jsx'
 import EmptyState from '../components/EmptyState.jsx'
 import DayHeader from '../components/dia/DayHeader.jsx'
 import Section from '../components/dia/Section.jsx'
-import CollapsibleTopic from '../components/dia/CollapsibleTopic.jsx'
 import Pearl from '../components/Pearl.jsx'
 import ClinicalWarning from '../components/ClinicalWarning.jsx'
-import ClinicalCase from '../components/dia/ClinicalCase.jsx'
 import QuickReview from '../components/dia/QuickReview.jsx'
 import CompleteButton from '../components/dia/CompleteButton.jsx'
+import Introduction from '../components/learn/Introduction.jsx'
+import Lesson from '../components/learn/Lesson.jsx'
+import SkillsChecklist from '../components/learn/SkillsChecklist.jsx'
+import InteractiveCase from '../components/learn/InteractiveCase.jsx'
+import Quiz from '../components/learn/Quiz.jsx'
+import References from '../components/learn/References.jsx'
 
 export default function DiaDetail() {
   const { dia } = useParams()
@@ -41,6 +45,14 @@ export default function DiaDetail() {
   const prev = DIAS.find((d) => d.dia === data.dia - 1)
   const next = DIAS.find((d) => d.dia === data.dia + 1)
 
+  const lecciones = data.lecciones || []
+  const pearls = data.pearls || []
+  const errores = data.errores || []
+  const skills = data.skills || []
+  const quiz = data.quiz || []
+  const referencias = data.referencias || []
+  const quickReview = data.quickReview || []
+
   return (
     <div className="space-y-9">
       {/* Volver */}
@@ -59,7 +71,10 @@ export default function DiaDetail() {
         completo={completo}
       />
 
-      {/* Objetivos */}
+      {/* 1 — Introducción */}
+      <Introduction intro={data.intro} />
+
+      {/* 2 — Objetivos de aprendizaje */}
       <Section icon="target" title="Objetivos de aprendizaje" tone="steel">
         <ul className="grid gap-3 sm:grid-cols-2">
           {data.objetivos.map((o, i) => (
@@ -76,48 +91,71 @@ export default function DiaDetail() {
         </ul>
       </Section>
 
-      {/* Temas nucleares */}
-      <Section icon="list" title="Temas nucleares" count={data.temas.length} tone="steel">
-        <div className="space-y-3">
-          {data.temas.map((t, i) => (
-            <CollapsibleTopic key={i} titulo={t.titulo} puntos={t.puntos} defaultOpen={i === 0} />
-          ))}
-        </div>
-      </Section>
+      {/* 3 — Lecciones nucleares */}
+      {lecciones.length > 0 && (
+        <Section icon="book" title="Lecciones nucleares" count={lecciones.length} tone="steel">
+          <div className="space-y-3">
+            {lecciones.map((l, i) => (
+              <Lesson key={l.id || i} index={i + 1} leccion={l} defaultOpen={i === 0} />
+            ))}
+          </div>
+        </Section>
+      )}
 
-      {/* Perlas */}
-      {data.pearls.length > 0 && (
-        <Section icon="gem" title="ICU Pearls" count={data.pearls.length} tone="pearl">
+      {/* 4 — ICU Pearls */}
+      {pearls.length > 0 && (
+        <Section icon="gem" title="ICU Pearls" count={pearls.length} tone="pearl">
           <div className="grid gap-3 md:grid-cols-2">
-            {data.pearls.map((p, i) => (
+            {pearls.map((p, i) => (
               <Pearl key={i}>{p}</Pearl>
             ))}
           </div>
         </Section>
       )}
 
-      {/* Errores frecuentes */}
-      {data.errores.length > 0 && (
-        <Section icon="alert" title="Errores frecuentes" count={data.errores.length} tone="terra">
+      {/* 5 — Errores frecuentes */}
+      {errores.length > 0 && (
+        <Section icon="alert" title="Errores frecuentes" count={errores.length} tone="terra">
           <div className="grid gap-3 md:grid-cols-2">
-            {data.errores.map((e, i) => (
+            {errores.map((e, i) => (
               <ClinicalWarning key={i}>{e}</ClinicalWarning>
             ))}
           </div>
         </Section>
       )}
 
-      {/* Caso clínico */}
+      {/* 6 — Habilidades prácticas */}
+      {skills.length > 0 && (
+        <Section icon="check" title="Habilidades prácticas" count={skills.length} tone="mint">
+          <SkillsChecklist dia={data.dia} items={skills} />
+        </Section>
+      )}
+
+      {/* 7 — Caso clínico interactivo */}
       {data.caso && (
-        <Section icon="case" title="Caso clínico" tone="steel">
-          <ClinicalCase caso={data.caso} />
+        <Section icon="stethoscope" title="Caso clínico interactivo" tone="steel">
+          <InteractiveCase caso={data.caso} />
+        </Section>
+      )}
+
+      {/* 8 — Autoevaluación */}
+      {quiz.length > 0 && (
+        <Section icon="clipboard" title="Autoevaluación" count={quiz.length} tone="pearl">
+          <Quiz dia={data.dia} preguntas={quiz} />
         </Section>
       )}
 
       {/* Repaso rápido */}
-      {data.quickReview.length > 0 && (
+      {quickReview.length > 0 && (
         <Section icon="badge" title="Repaso rápido" tone="mint">
-          <QuickReview points={data.quickReview} />
+          <QuickReview points={quickReview} />
+        </Section>
+      )}
+
+      {/* 9 — Referencias */}
+      {referencias.length > 0 && (
+        <Section icon="library" title="Referencias" count={referencias.length} tone="steel">
+          <References referencias={referencias} />
         </Section>
       )}
 
@@ -130,7 +168,8 @@ export default function DiaDetail() {
           title="Contenido detallado en construcción"
         >
           La estructura de este módulo ya está lista para poblarse con el mismo formato del Día 1:
-          objetivos, temas nucleares, perlas clínicas, errores frecuentes, caso y repaso rápido.
+          introducción, lecciones nucleares, perlas, errores, habilidades, caso interactivo,
+          autoevaluación y referencias.
         </EmptyState>
       )}
 
