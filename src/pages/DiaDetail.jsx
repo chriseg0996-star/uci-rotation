@@ -29,14 +29,14 @@ export default function DiaDetail() {
         icon="compass"
         tone="terra"
         status="Sin resultados"
-        title="Ese día no existe"
+        title="Ese módulo no existe"
         action={
           <Button as={Link} to="/temario" variant="secondary" icon="back">
             Volver al temario
           </Button>
         }
       >
-        El módulo que buscas no forma parte del programa de 7 días de la rotación.
+        El módulo que buscas no forma parte del currículo de 8 módulos de la rotación.
       </EmptyState>
     )
   }
@@ -167,9 +167,9 @@ export default function DiaDetail() {
           status="En desarrollo"
           title="Contenido detallado en construcción"
         >
-          La estructura de este módulo ya está lista para poblarse con el mismo formato del Día 1:
-          introducción, lecciones nucleares, perlas, errores, habilidades, caso interactivo,
-          autoevaluación y referencias.
+          La estructura de este módulo ya está lista para poblarse con el mismo formato del
+          Módulo 1: introducción, lecciones nucleares, perlas, errores, habilidades, caso
+          interactivo, autoevaluación y referencias.
         </EmptyState>
       )}
 
@@ -184,7 +184,7 @@ export default function DiaDetail() {
             onClick={() => prev && navigate(`/temario/${prev.dia}`)}
             icon="back"
           >
-            Día {data.dia - 1}
+            Módulo {data.dia - 1}
           </Button>
           <Button
             variant="secondary"
@@ -193,7 +193,7 @@ export default function DiaDetail() {
             onClick={() => next && navigate(`/temario/${next.dia}`)}
             iconRight="arrow"
           >
-            Día {data.dia + 1}
+            Módulo {data.dia + 1}
           </Button>
         </div>
       </div>

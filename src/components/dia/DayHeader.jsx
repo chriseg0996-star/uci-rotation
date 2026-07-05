@@ -35,7 +35,7 @@ export default function DayHeader({ dia, titulo, tiempoEstimado, completo }) {
         </div>
         <div className="min-w-0 flex-1">
           <p className="text-[10.5px] font-semibold uppercase tracking-[0.18em] text-steel-400">
-            Día {dia} · Módulo diario
+            Módulo {dia}
           </p>
           <h1 className="mt-1.5 text-[24px] font-semibold leading-[1.12] tracking-tightest text-ink-100 sm:text-[28px]">
             {titulo}

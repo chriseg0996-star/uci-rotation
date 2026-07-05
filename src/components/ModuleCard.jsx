@@ -43,7 +43,7 @@ export default function ModuleCard({
         {seal}
         <div className="min-w-0 flex-1">
           <p className="truncate text-sm font-medium text-ink-100">
-            <span className="font-mono text-ink-400">D{dia}</span>
+            <span className="font-mono text-ink-400">M{dia}</span>
             <span className="mx-1.5 text-slate-600">·</span>
             {titulo}
           </p>
@@ -51,7 +51,7 @@ export default function ModuleCard({
         </div>
         {today && (
           <Badge tone="steel" dot className="shrink-0">
-            Hoy
+            Actual
           </Badge>
         )}
         <Icon
@@ -71,7 +71,7 @@ export default function ModuleCard({
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2">
               <p className="text-[10.5px] font-semibold uppercase tracking-[0.16em] text-ink-400">
-                Día {dia}
+                Módulo {dia}
               </p>
               {pendiente && (
                 <span className="rounded-full bg-slate-900 px-1.5 py-0.5 text-[9.5px] font-semibold uppercase tracking-wide text-ink-400 ring-1 ring-slate-700">

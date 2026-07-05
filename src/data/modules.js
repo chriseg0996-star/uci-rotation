@@ -1,5 +1,8 @@
 // Fuente única de verdad para navegación, currículo y métricas.
-// Los conteos de progreso son placeholders; se conectarán a localStorage en el siguiente paso.
+// Estructura por módulos temáticos de UCI (enseñanza institucional).
+// Nota interna: el identificador numérico de cada módulo se conserva en el campo `dia`
+// para no romper rutas (/temario/:dia) ni claves de localStorage existentes.
+// Los conteos de progreso estáticos son placeholders; se conectarán a localStorage.
 
 export const NAV = [
   { key: 'dashboard', label: 'Dashboard', path: '/', icon: 'grid' },
@@ -13,107 +16,128 @@ export const NAV = [
 
 export const ROTATION = {
   title: 'UCI Rotation',
-  subtitle: 'Bootcamp de Terapia Intensiva para Residentes Rotantes',
-  week: 1,
-  totalWeeks: 1,
+  subtitle: 'Currículo de Terapia Intensiva basado en los temas de enseñanza de la unidad.',
   audiencia: ['Medicina Interna R3', 'Urgencias R3', 'Anestesiología R2'],
 }
 
+// Currículo modular de UCI. `dia` = identificador numérico del módulo (1–8).
 export const MODULES = [
   {
     dia: 1,
-    titulo: 'Evaluación inicial del paciente crítico',
+    titulo: 'Neuromonitoreo',
     objetivo:
-      'Estructurar el abordaje ABCDE, priorizar la reanimación guiada por perfusión y reconocer al paciente en deterioro.',
+      'Integrar la monitorización neurológica multimodal para detectar y prevenir la lesión cerebral secundaria en el paciente neurocrítico.',
     temas: [
-      'Abordaje ABCDE y triage de gravedad',
-      'Monitorización hemodinámica básica y avanzada',
-      'Perfusión tisular: lactato, llenado capilar, moteado',
-      'Escalas: SOFA, APACHE II, NEWS2',
+      'Examen neurológico dirigido y escala de coma de Glasgow',
+      'Presión intracraneal y presión de perfusión cerebral',
+      'Doppler transcraneal y pupilometría cuantitativa',
+      'EEG continuo y detección de crisis no convulsivas',
+      'Oximetría cerebral (NIRS) y monitorización multimodal',
     ],
   },
   {
     dia: 2,
-    titulo: 'Ventilación mecánica y gasometría',
+    titulo: 'Sepsis',
     objetivo:
-      'Interpretar la gasometría arterial e iniciar ventilación protectora en el paciente con insuficiencia respiratoria.',
+      'Reconocer y tratar la sepsis y el choque séptico con reanimación guiada por perfusión y control de foco oportuno.',
     temas: [
-      'Interpretación sistemática de gasometría',
-      'Ventilación protectora: Vt, driving pressure, meseta',
-      'PEEP, reclutamiento y oxigenación',
-      'Modos ventilatorios y asincronías',
+      'Definiciones Sepsis-3 y tamizaje',
+      'Paquete de la primera hora (Surviving Sepsis)',
+      'Antimicrobiano empírico, control de foco y desescalamiento',
+      'Reanimación guiada por perfusión y respuesta a volumen',
+      'Biomarcadores y reevaluación dinámica',
     ],
   },
   {
     dia: 3,
-    titulo: 'Choque y vasopresores',
+    titulo: 'Ventilación: Bases y Programación',
     objetivo:
-      'Clasificar el choque por fenotipo, guiar la reanimación y titular vasopresores con objetivo de PAM.',
+      'Programar la ventilación mecánica inicial sobre principios de ventilación protectora y fisiología respiratoria.',
     temas: [
-      'Fenotipos de choque y diagnóstico diferencial',
-      'Fluidoterapia guiada por respuesta a volumen',
-      'Noradrenalina primero: titulación y objetivos',
-      'Vasopresores de segunda línea e inotrópicos',
+      'Mecánica respiratoria: distensibilidad y resistencia',
+      'Modos ventilatorios y variables de control',
+      'Programación inicial y ventilación protectora',
+      'Driving pressure, PEEP y reclutamiento',
+      'Asincronías paciente-ventilador',
     ],
   },
   {
     dia: 4,
-    titulo: 'Sepsis y antimicrobianos',
+    titulo: 'Retiro de la ventilación mecánica',
     objetivo:
-      'Aplicar el paquete de la primera hora y elegir esquema antimicrobiano empírico según foco y ecología local.',
+      'Ejecutar un destete y una extubación seguros, anticipando y manejando el fallo de destete.',
     temas: [
-      'Definiciones Sepsis-3 y tamizaje',
-      'Paquete de la primera hora (Surviving Sepsis)',
-      'Terapia antimicrobiana empírica y de-escalamiento',
-      'Control de foco y biomarcadores',
+      'Criterios de destete y prueba de ventilación espontánea',
+      'Índices predictivos (RSBI) y valoración de la mecánica',
+      'Prueba de fuga y riesgo de estridor post-extubación',
+      'Estrategia de extubación y soporte post-extubación',
+      'Fallo de destete: causas cardíacas y respiratorias',
     ],
   },
   {
     dia: 5,
-    titulo: 'Lesión renal aguda y TRR',
+    titulo: 'Choque y Monitoreo Hemodinámico',
     objetivo:
-      'Estadificar la LRA, corregir causas reversibles y reconocer indicaciones e inicio de terapia de reemplazo renal.',
+      'Clasificar el choque por fenotipo y guiar la reanimación con la monitorización hemodinámica adecuada.',
     temas: [
-      'Criterios KDIGO y diagnóstico diferencial',
-      'Manejo conservador y ajuste de fármacos',
-      'Indicaciones y momento de inicio de TRR',
-      'Modalidades: intermitente vs. continua',
+      'Fenotipos de choque y diagnóstico diferencial',
+      'Respuesta a volumen e índices dinámicos',
+      'Vasopresores e inotrópicos: elección y titulación',
+      'Gasto cardíaco y monitorización avanzada',
+      'Objetivos de reanimación y reevaluación',
     ],
   },
   {
     dia: 6,
-    titulo: 'Neurocrítico y sedación',
+    titulo: 'Ácido-base',
     objetivo:
-      'Manejar la sedoanalgesia por objetivos, prevenir el delirium y aplicar medidas de neuroprotección.',
+      'Interpretar de forma sistemática los trastornos del equilibrio ácido-base y orientar su manejo.',
     temas: [
-      'Sedación por objetivos: RASS, CPOT, analgesia primero',
-      'Prevención y manejo del delirium (CAM-ICU)',
-      'Neuroprotección e hipertensión intracraneal',
-      'Interrupción diaria y bundle ABCDEF',
+      'Abordaje sistemático de la gasometría',
+      'Trastornos primarios y compensación esperada',
+      'Brecha aniónica y análisis delta-delta',
+      'Acidosis metabólica: causas y manejo',
+      'Enfoque de Stewart (iones fuertes)',
     ],
   },
   {
     dia: 7,
-    titulo: 'Caso integrador y evaluación final',
+    titulo: 'Protocolo ECO: VExUS, BLUE, FAST',
     objetivo:
-      'Integrar el razonamiento clínico en un caso complejo y demostrar competencias mediante la evaluación final.',
+      'Aplicar la ecografía a pie de cama para evaluar congestión venosa, patrón pulmonar y trauma, e integrarla en la reanimación.',
     temas: [
-      'Caso integrador multisistémico',
-      'Toma de decisiones bajo incertidumbre',
-      'Presentación y discusión estructurada',
-      'Evaluación final de la rotación',
+      'BLUE-protocol: patrones pulmonares y perfiles',
+      'VExUS: gradación de la congestión venosa sistémica',
+      'FAST / eFAST en el paciente traumatizado',
+      'Integración ecográfica con la reanimación hemodinámica',
+      'Errores frecuentes e interpretación de artefactos',
+    ],
+  },
+  {
+    dia: 8,
+    titulo: 'Poliurias',
+    objetivo:
+      'Estructurar el diagnóstico diferencial de la poliuria en UCI y su manejo hidroelectrolítico.',
+    temas: [
+      'Definición y abordaje inicial de la poliuria',
+      'Diuresis osmótica vs. diuresis acuosa',
+      'Diabetes insípida central y nefrogénica',
+      'Poliuria post-obstructiva y de la recuperación de NTA',
+      'Manejo de agua libre y electrolitos',
     ],
   },
 ]
 
-// Métricas de progreso (placeholder — se poblará desde localStorage).
+// Métricas de progreso del currículo (8 módulos). El contador de módulos completados
+// se conecta al progreso real en el Dashboard; el resto son placeholders.
 export const PROGRESS = [
-  { key: 'temas', label: 'Temas completados', done: 0, total: 28, unit: 'temas' },
-  { key: 'checklists', label: 'Checklists completadas', done: 0, total: 7, unit: 'checklists' },
-  { key: 'casos', label: 'Casos discutidos', done: 0, total: 7, unit: 'casos' },
-  { key: 'evaluacion', label: 'Evaluación final', done: 0, total: 1, unit: 'intento' },
+  { key: 'modulos', label: 'Módulos completados', done: 0, total: MODULES.length, unit: 'módulos' },
+  { key: 'checklists', label: 'Checklists', done: 0, total: MODULES.length, unit: 'checklists' },
+  { key: 'casos', label: 'Casos clínicos', done: 0, total: MODULES.length, unit: 'casos' },
+  { key: 'quizzes', label: 'Autoevaluaciones', done: 0, total: MODULES.length, unit: 'quizzes' },
 ]
 
+// Módulo de inicio recomendado del currículo.
 export const TODAY = {
   dia: 1,
   objetivo: MODULES[0].objetivo,

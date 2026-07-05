@@ -13,16 +13,16 @@ export default function Temario() {
       <PageHeader
         kicker="Currículo"
         title="Temario"
-        description="Programa de 7 días. Cada módulo abre su propia página con objetivos, temas nucleares, perlas clínicas, errores frecuentes, un caso y repaso rápido."
+        description="Currículo de 8 módulos temáticos de UCI. Cada módulo abre su propia página con introducción, lecciones nucleares, perlas clínicas, errores frecuentes, habilidades, caso interactivo, autoevaluación y referencias."
         right={
           <div className="hidden w-48 sm:block">
             <StatCard
-              label="Días completados"
+              label="Módulos completados"
               value={count}
               sub={`/${DIAS.length}`}
               icon={count >= DIAS.length ? 'badge' : 'layers'}
               tone={count >= DIAS.length ? 'mint' : 'steel'}
-              hint={`${pct}% de la rotación`}
+              hint={`${pct}% del currículo`}
             />
           </div>
         }

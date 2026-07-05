@@ -1,10 +1,12 @@
-// Día 1 — Evaluación inicial del paciente crítico.
-// Contenido educativo de nivel intensivista senior. Español clínico. Sin relleno.
-// Esquema modular reutilizable por los Días 2–7.
+// Módulo 1 — Neuromonitoreo.
+// PLACEHOLDER TEMPORAL: mientras se desarrolla el contenido de Neuromonitoreo, este
+// módulo reutiliza el contenido de "Evaluación inicial del paciente crítico" para
+// mantener operativo el motor educativo (lecciones, checklist, caso, quiz, referencias).
+// Esquema modular reutilizable por los Módulos 2–8.
 
 const dia1 = {
   dia: 1,
-  titulo: 'Evaluación inicial del paciente crítico',
+  titulo: 'Neuromonitoreo',
   tiempoEstimado: '90–120 min',
 
   // 1 — Introducción: por qué importa

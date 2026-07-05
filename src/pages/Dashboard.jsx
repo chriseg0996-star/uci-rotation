@@ -7,14 +7,14 @@ import { ROTATION, MODULES, PROGRESS, TODAY } from '../data/modules.js'
 import { useCompletion } from '../hooks/useCompletion.js'
 
 const PROGRESS_ICONS = {
-  temas: 'list',
+  modulos: 'layers',
   checklists: 'check',
   casos: 'stethoscope',
-  evaluacion: 'clipboard',
+  quizzes: 'clipboard',
 }
 
 export default function Dashboard() {
-  const { isComplete } = useCompletion()
+  const { isComplete, count } = useCompletion()
 
   return (
     <div className="stagger space-y-10">
@@ -22,7 +22,7 @@ export default function Dashboard() {
       <section>
         <p className="flex items-center gap-2 text-[10.5px] font-semibold uppercase tracking-[0.18em] text-steel-400">
           <span className="inline-block h-1 w-4 rounded-full bg-steel-400/60" />
-          Semana {ROTATION.week} de {ROTATION.totalWeeks}
+          Currículo de UCI · {MODULES.length} módulos
         </p>
         <h1 className="mt-2.5 text-[30px] font-semibold leading-[1.08] tracking-tightest text-ink-100 sm:text-[34px]">
           {ROTATION.title}
@@ -41,10 +41,10 @@ export default function Dashboard() {
               </div>
               <div className="leading-tight">
                 <p className="text-[10.5px] font-semibold uppercase tracking-[0.16em] text-ink-400">
-                  Objetivo de hoy
+                  Empieza por aquí
                 </p>
                 <p className="mt-0.5 font-mono text-sm font-semibold text-steel-300">
-                  Día {TODAY.dia}
+                  Módulo {TODAY.dia}
                 </p>
               </div>
             </div>
@@ -59,20 +59,25 @@ export default function Dashboard() {
       {/* Progreso */}
       <section>
         <h2 className="mb-4 text-[11px] font-semibold uppercase tracking-[0.16em] text-ink-400">
-          Progreso de la rotación
+          Progreso del currículo
         </h2>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
           {PROGRESS.map(({ key, ...p }) => (
-            <ProgressCard key={key} {...p} icon={PROGRESS_ICONS[key] || 'list'} />
+            <ProgressCard
+              key={key}
+              {...p}
+              done={key === 'modulos' ? count : p.done}
+              icon={PROGRESS_ICONS[key] || 'list'}
+            />
           ))}
         </div>
       </section>
 
-      {/* Módulos por día */}
+      {/* Módulos del currículo */}
       <section>
         <div className="mb-4 flex items-center justify-between">
           <h2 className="text-[11px] font-semibold uppercase tracking-[0.16em] text-ink-400">
-            Módulos diarios
+            Módulos del currículo
           </h2>
           <Button as={Link} to="/temario" variant="ghost" size="sm" iconRight="arrow">
             Ver temario

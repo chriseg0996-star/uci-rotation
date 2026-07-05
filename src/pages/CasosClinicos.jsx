@@ -16,11 +16,11 @@ export default function CasosClinicos() {
           { icon: 'case', text: 'Datos clínicos, estudios y puntos de decisión' },
           { icon: 'compass', text: 'Ramificación según la conducta elegida' },
           { icon: 'gem', text: 'Retroalimentación basada en evidencia' },
-          { icon: 'layers', text: 'Caso integrador multisistémico (Día 7)' },
+          { icon: 'layers', text: 'Un caso por cada módulo del currículo' },
         ]}
       >
-        Formato de caso ramificado con datos clínicos, estudios y puntos de decisión. Culminará en
-        el caso integrador multisistémico del Día 7.
+        Formato de caso ramificado con datos clínicos, estudios y puntos de decisión, uno por cada
+        módulo temático del currículo de UCI.
       </EmptyState>
     </div>
   )

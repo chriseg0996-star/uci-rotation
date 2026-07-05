@@ -1,8 +1,8 @@
-// Registro de días de la rotación (motor educativo).
-// Día 1 usa el esquema completo (./days/dia1.js). Los Días 2–7 se generan como
+// Registro de módulos del currículo (motor educativo).
+// El Módulo 1 usa el esquema completo (./days/dia1.js). Los Módulos 2–8 se generan como
 // esquemas compatibles desde MODULES, listos para poblarse con el mismo formato.
 //
-// Esquema por día (todos los campos salvo dia/titulo son opcionales):
+// Esquema por módulo (todos los campos salvo dia/titulo son opcionales):
 //   { dia, titulo, tiempoEstimado, intro, objetivos, lecciones,
 //     pearls, errores, skills, caso, quiz, referencias, quickReview, pendiente }
 import { MODULES } from './modules.js'
