@@ -1,0 +1,43 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    color-scheme: dark;
+  }
+  body {
+    @apply bg-navy-950 text-ink-100 font-sans antialiased;
+    font-feature-settings: 'cv11', 'ss01';
+  }
+  ::selection {
+    @apply bg-icu/30 text-white;
+  }
+  /* Thin clinical scrollbar */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #1B3050 transparent;
+  }
+  *::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  *::-webkit-scrollbar-thumb {
+    @apply bg-navy-700 rounded-full;
+    border: 3px solid transparent;
+    background-clip: padding-box;
+  }
+}
+
+@layer utilities {
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
