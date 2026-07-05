@@ -9,9 +9,17 @@ export default function Evaluacion() {
         title="Evaluación"
         description="Examen final de la rotación con reactivos de opción múltiple, retroalimentación por tema y reporte de desempeño por sistema."
       />
-      <EmptyState icon="clipboard" title="Evaluación final en construcción">
-        Se habilitará al completar los módulos diarios. Generará un puntaje por dominio y
-        recomendaciones de repaso dirigidas.
+      <EmptyState
+        icon="clipboard"
+        title="Evaluación final en construcción"
+        preview={[
+          { icon: 'list', text: 'Reactivos de opción múltiple por dominio' },
+          { icon: 'gem', text: 'Retroalimentación dirigida por tema' },
+          { icon: 'target', text: 'Puntaje de desempeño por sistema' },
+          { icon: 'badge', text: 'Se habilita al completar los módulos diarios' },
+        ]}
+      >
+        Examen final con reporte por dominio y recomendaciones de repaso dirigidas.
       </EmptyState>
     </div>
   )

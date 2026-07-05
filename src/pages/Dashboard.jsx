@@ -1,105 +1,101 @@
 import { Link } from 'react-router-dom'
-import Card, { CardHeader } from '../components/Card.jsx'
 import ProgressCard from '../components/ProgressCard.jsx'
+import ModuleCard from '../components/ModuleCard.jsx'
+import Button from '../components/Button.jsx'
 import Icon from '../components/Icon.jsx'
 import { ROTATION, MODULES, PROGRESS, TODAY } from '../data/modules.js'
+import { useCompletion } from '../hooks/useCompletion.js'
+
+const PROGRESS_ICONS = {
+  temas: 'list',
+  checklists: 'check',
+  casos: 'stethoscope',
+  evaluacion: 'clipboard',
+}
 
 export default function Dashboard() {
+  const { isComplete } = useCompletion()
+
   return (
-    <div className="space-y-8">
+    <div className="stagger space-y-10">
       {/* Hero */}
       <section>
-        <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-icu-400">
+        <p className="flex items-center gap-2 text-[10.5px] font-semibold uppercase tracking-[0.18em] text-steel-400">
+          <span className="inline-block h-1 w-4 rounded-full bg-steel-400/60" />
           Semana {ROTATION.week} de {ROTATION.totalWeeks}
         </p>
-        <h1 className="mt-1.5 text-3xl font-semibold tracking-tight text-ink-100">
+        <h1 className="mt-2.5 text-[30px] font-semibold leading-[1.08] tracking-tightest text-ink-100 sm:text-[34px]">
           {ROTATION.title}
         </h1>
-        <p className="mt-1.5 text-[15px] text-ink-200">{ROTATION.subtitle}</p>
+        <p className="mt-2 max-w-2xl text-[15px] leading-relaxed text-ink-300">
+          {ROTATION.subtitle}
+        </p>
 
-        {/* Objetivo del día */}
-        <Card className="mt-5 overflow-hidden">
-          <div className="flex flex-col gap-4 p-5 sm:flex-row sm:items-center">
-            <div className="flex items-center gap-3 sm:w-48 sm:shrink-0">
-              <div className="grid h-10 w-10 place-items-center rounded-lg bg-icu-soft ring-1 ring-icu/25">
-                <Icon name="spark" size={20} className="text-icu-400" />
+        {/* Objetivo del día — panel destacado */}
+        <div className="relative mt-6 overflow-hidden rounded-2xl border border-slate-700/60 bg-gradient-to-br from-slate-800 to-slate-850 p-5 shadow-card sm:p-6">
+          <div className="pointer-events-none absolute -right-10 -top-12 h-40 w-40 rounded-full bg-steel-400/10 blur-3xl" />
+          <div className="relative flex flex-col gap-5 sm:flex-row sm:items-center">
+            <div className="flex items-center gap-3.5 sm:w-52 sm:shrink-0">
+              <div className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-steel-soft text-steel-300 ring-1 ring-steel-400/25">
+                <Icon name="spark" size={21} />
               </div>
               <div className="leading-tight">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-ink-400">
+                <p className="text-[10.5px] font-semibold uppercase tracking-[0.16em] text-ink-400">
                   Objetivo de hoy
                 </p>
-                <p className="font-mono text-sm font-semibold text-icu-400">Día {TODAY.dia}</p>
+                <p className="mt-0.5 font-mono text-sm font-semibold text-steel-300">
+                  Día {TODAY.dia}
+                </p>
               </div>
             </div>
-            <p className="text-sm leading-relaxed text-ink-200">{TODAY.objetivo}</p>
+            <p className="flex-1 text-[14px] leading-relaxed text-ink-200">{TODAY.objetivo}</p>
+            <Button as={Link} to={`/temario/${TODAY.dia}`} variant="primary" iconRight="arrow" className="shrink-0">
+              Abrir módulo
+            </Button>
           </div>
-        </Card>
+        </div>
       </section>
 
       {/* Progreso */}
       <section>
-        <h2 className="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-ink-400">
+        <h2 className="mb-4 text-[11px] font-semibold uppercase tracking-[0.16em] text-ink-400">
           Progreso de la rotación
         </h2>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-          {PROGRESS.map((p) => (
-            <ProgressCard key={p.key} {...p} />
+          {PROGRESS.map(({ key, ...p }) => (
+            <ProgressCard key={key} {...p} icon={PROGRESS_ICONS[key] || 'list'} />
           ))}
         </div>
       </section>
 
       {/* Módulos por día */}
       <section>
-        <div className="mb-3 flex items-center justify-between">
-          <h2 className="text-sm font-semibold uppercase tracking-[0.14em] text-ink-400">
+        <div className="mb-4 flex items-center justify-between">
+          <h2 className="text-[11px] font-semibold uppercase tracking-[0.16em] text-ink-400">
             Módulos diarios
           </h2>
-          <Link
-            to="/temario"
-            className="inline-flex items-center gap-1.5 text-xs font-medium text-icu-400 hover:text-icu"
-          >
-            Ver temario completo
-            <Icon name="arrow" size={14} />
-          </Link>
+          <Button as={Link} to="/temario" variant="ghost" size="sm" iconRight="arrow">
+            Ver temario
+          </Button>
         </div>
 
-        <Card>
-          <ul className="divide-y divide-navy-700/50">
-            {MODULES.map((m) => {
-              const isToday = m.dia === TODAY.dia
-              return (
-                <li key={m.dia}>
-                 <Link
+        <div className="overflow-hidden rounded-2xl border border-slate-700/60 bg-slate-800/70 shadow-card">
+          <ul className="divide-y divide-slate-700/40">
+            {MODULES.map((m) => (
+              <li key={m.dia} className="group">
+                <ModuleCard
+                  variant="row"
                   to={`/temario/${m.dia}`}
-                  className="flex items-center gap-4 px-5 py-3.5 transition-colors hover:bg-navy-800/50"
-                >
-                  <div
-                    className={[
-                      'grid h-9 w-9 shrink-0 place-items-center rounded-lg font-mono text-sm font-semibold tabular',
-                      isToday
-                        ? 'bg-icu-500 text-white'
-                        : 'bg-navy-900 text-ink-300 ring-1 ring-navy-700',
-                    ].join(' ')}
-                  >
-                    {m.dia}
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm font-medium text-ink-100">
-                      Día {m.dia} · {m.titulo}
-                    </p>
-                    <p className="truncate text-xs text-ink-400">{m.objetivo}</p>
-                  </div>
-                  {isToday && (
-                    <span className="shrink-0 rounded-full bg-icu-soft px-2.5 py-0.5 text-[11px] font-semibold text-icu-400 ring-1 ring-icu/25">
-                      Hoy
-                    </span>
-                  )}
-                 </Link>
-                </li>
-              )
-            })}
+                  dia={m.dia}
+                  titulo={m.titulo}
+                  objetivo={m.objetivo}
+                  today={m.dia === TODAY.dia}
+                  done={isComplete(m.dia)}
+                />
+              </li>
+            ))}
           </ul>
-        </Card>
+        </div>
       </section>
     </div>
   )

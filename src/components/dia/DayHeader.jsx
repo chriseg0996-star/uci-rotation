@@ -1,60 +1,61 @@
 import Icon from '../Icon.jsx'
+import Badge from '../Badge.jsx'
 
 export default function DayHeader({ dia, titulo, tiempoEstimado, completo }) {
   return (
-    <header className="relative overflow-hidden rounded-2xl border border-navy-700/60 bg-gradient-to-br from-navy-800 to-navy-900 p-6 shadow-card sm:p-7">
-      {/* Trazo de vital sutil */}
+    <header className="relative overflow-hidden rounded-2xl border border-slate-700/60 bg-gradient-to-br from-slate-800 to-slate-850 p-6 shadow-card sm:p-7">
+      {/* Trazo de monitor: firma visual de la unidad */}
       <svg
-        className="pointer-events-none absolute -right-6 top-1/2 h-24 w-64 -translate-y-1/2 text-icu/10"
+        className="pointer-events-none absolute -right-4 top-1/2 h-28 w-72 -translate-y-1/2 text-steel-400/[0.09]"
         viewBox="0 0 240 80"
         fill="none"
         aria-hidden="true"
       >
         <path
-          d="M0 40h60l10-26 14 52 12-40 8 14h116"
+          d="M0 40h56l8-24 12 48 10-40 7 16h20l6-12 10 24h95"
           stroke="currentColor"
           strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
         />
       </svg>
+      {/* Halo superior */}
+      <div className="pointer-events-none absolute -left-10 -top-16 h-40 w-40 rounded-full bg-steel-400/10 blur-3xl" />
 
       <div className="relative flex flex-col gap-4 sm:flex-row sm:items-center">
-        <div className="grid h-14 w-14 shrink-0 place-items-center rounded-xl bg-icu-500 font-mono text-2xl font-semibold text-white shadow-lg shadow-icu/20">
-          {dia}
+        <div
+          className={[
+            'grid h-14 w-14 shrink-0 place-items-center rounded-2xl font-mono text-2xl font-semibold shadow-lg',
+            completo
+              ? 'bg-mint-soft text-mint-300 ring-1 ring-mint-400/30 shadow-mint-400/10'
+              : 'bg-steel-400 text-slate-900 shadow-steel-400/20',
+          ].join(' ')}
+        >
+          {completo ? <Icon name="badge" size={26} /> : dia}
         </div>
         <div className="min-w-0 flex-1">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-icu-400">
+          <p className="text-[10.5px] font-semibold uppercase tracking-[0.18em] text-steel-400">
             Día {dia} · Módulo diario
           </p>
-          <h1 className="mt-1 text-2xl font-semibold leading-tight tracking-tight text-ink-100 sm:text-[28px]">
+          <h1 className="mt-1.5 text-[24px] font-semibold leading-[1.12] tracking-tightest text-ink-100 sm:text-[28px]">
             {titulo}
           </h1>
-          <div className="mt-2.5 flex flex-wrap items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-navy-900/70 px-2.5 py-1 text-xs text-ink-300 ring-1 ring-navy-700">
-              <Icon name="clock" size={13} className="text-ink-400" />
+          <div className="mt-3 flex flex-wrap items-center gap-2">
+            <Badge tone="neutral" icon="clock">
               {tiempoEstimado} de estudio
-            </span>
-            <CompletionBadge completo={completo} />
+            </Badge>
+            {completo ? (
+              <Badge tone="mint" icon="badge">
+                Completado
+              </Badge>
+            ) : (
+              <Badge tone="neutral" dot>
+                En progreso
+              </Badge>
+            )}
           </div>
         </div>
       </div>
     </header>
-  )
-}
-
-function CompletionBadge({ completo }) {
-  if (completo) {
-    return (
-      <span className="inline-flex items-center gap-1.5 rounded-full bg-vital-green/15 px-2.5 py-1 text-xs font-semibold text-vital-green ring-1 ring-vital-green/30">
-        <Icon name="badge" size={13} />
-        Completado
-      </span>
-    )
-  }
-  return (
-    <span className="inline-flex items-center gap-1.5 rounded-full bg-navy-900/70 px-2.5 py-1 text-xs text-ink-400 ring-1 ring-navy-700">
-      En progreso
-    </span>
   )
 }

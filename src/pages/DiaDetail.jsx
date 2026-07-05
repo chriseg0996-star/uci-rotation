@@ -2,10 +2,13 @@ import { useParams, Link, useNavigate } from 'react-router-dom'
 import { getDia, DIAS } from '../data/dias.js'
 import { useCompletion } from '../hooks/useCompletion.js'
 import Icon from '../components/Icon.jsx'
+import Button from '../components/Button.jsx'
+import EmptyState from '../components/EmptyState.jsx'
 import DayHeader from '../components/dia/DayHeader.jsx'
 import Section from '../components/dia/Section.jsx'
 import CollapsibleTopic from '../components/dia/CollapsibleTopic.jsx'
-import { PearlCard, MistakeCard } from '../components/dia/Cards.jsx'
+import Pearl from '../components/Pearl.jsx'
+import ClinicalWarning from '../components/ClinicalWarning.jsx'
 import ClinicalCase from '../components/dia/ClinicalCase.jsx'
 import QuickReview from '../components/dia/QuickReview.jsx'
 import CompleteButton from '../components/dia/CompleteButton.jsx'
@@ -18,12 +21,19 @@ export default function DiaDetail() {
 
   if (!data) {
     return (
-      <div className="py-16 text-center">
-        <p className="text-sm text-ink-300">Ese día no existe.</p>
-        <Link to="/temario" className="mt-3 inline-block text-sm text-icu-400 hover:text-icu">
-          Volver al temario
-        </Link>
-      </div>
+      <EmptyState
+        icon="compass"
+        tone="terra"
+        status="Sin resultados"
+        title="Ese día no existe"
+        action={
+          <Button as={Link} to="/temario" variant="secondary" icon="back">
+            Volver al temario
+          </Button>
+        }
+      >
+        El módulo que buscas no forma parte del programa de 7 días de la rotación.
+      </EmptyState>
     )
   }
 
@@ -32,11 +42,11 @@ export default function DiaDetail() {
   const next = DIAS.find((d) => d.dia === data.dia + 1)
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-9">
       {/* Volver */}
       <Link
         to="/temario"
-        className="inline-flex items-center gap-1.5 text-sm text-ink-400 transition-colors hover:text-ink-100"
+        className="inline-flex items-center gap-1.5 text-[13px] font-medium text-ink-400 transition-colors hover:text-ink-100"
       >
         <Icon name="back" size={15} />
         Temario
@@ -50,42 +60,37 @@ export default function DiaDetail() {
       />
 
       {/* Objetivos */}
-      <Section icon="target" title="Objetivos de aprendizaje">
+      <Section icon="target" title="Objetivos de aprendizaje" tone="steel">
         <ul className="grid gap-3 sm:grid-cols-2">
           {data.objetivos.map((o, i) => (
             <li
               key={i}
-              className="flex items-start gap-3 rounded-xl border border-navy-700/60 bg-navy-800/50 p-4"
+              className="flex items-start gap-3 rounded-xl border border-slate-700/60 bg-slate-800/50 p-4 transition-colors hover:border-slate-600"
             >
-              <span className="grid h-6 w-6 shrink-0 place-items-center rounded-md bg-icu-soft font-mono text-xs font-semibold text-icu-400 ring-1 ring-icu/25">
+              <span className="grid h-6 w-6 shrink-0 place-items-center rounded-md bg-steel-soft font-mono text-xs font-semibold tabular text-steel-300 ring-1 ring-steel-400/25">
                 {i + 1}
               </span>
-              <p className="pt-0.5 text-sm leading-relaxed text-ink-200">{o}</p>
+              <p className="pt-0.5 text-[13.5px] leading-relaxed text-ink-200">{o}</p>
             </li>
           ))}
         </ul>
       </Section>
 
       {/* Temas nucleares */}
-      <Section icon="list" title="Temas nucleares" count={data.temas.length}>
+      <Section icon="list" title="Temas nucleares" count={data.temas.length} tone="steel">
         <div className="space-y-3">
           {data.temas.map((t, i) => (
-            <CollapsibleTopic
-              key={i}
-              titulo={t.titulo}
-              puntos={t.puntos}
-              defaultOpen={i === 0}
-            />
+            <CollapsibleTopic key={i} titulo={t.titulo} puntos={t.puntos} defaultOpen={i === 0} />
           ))}
         </div>
       </Section>
 
       {/* Perlas */}
       {data.pearls.length > 0 && (
-        <Section icon="bulb" title="ICU Pearls" count={data.pearls.length}>
+        <Section icon="gem" title="ICU Pearls" count={data.pearls.length} tone="pearl">
           <div className="grid gap-3 md:grid-cols-2">
             {data.pearls.map((p, i) => (
-              <PearlCard key={i}>{p}</PearlCard>
+              <Pearl key={i}>{p}</Pearl>
             ))}
           </div>
         </Section>
@@ -93,10 +98,10 @@ export default function DiaDetail() {
 
       {/* Errores frecuentes */}
       {data.errores.length > 0 && (
-        <Section icon="alert" title="Errores frecuentes" count={data.errores.length}>
+        <Section icon="alert" title="Errores frecuentes" count={data.errores.length} tone="terra">
           <div className="grid gap-3 md:grid-cols-2">
             {data.errores.map((e, i) => (
-              <MistakeCard key={i}>{e}</MistakeCard>
+              <ClinicalWarning key={i}>{e}</ClinicalWarning>
             ))}
           </div>
         </Section>
@@ -104,48 +109,53 @@ export default function DiaDetail() {
 
       {/* Caso clínico */}
       {data.caso && (
-        <Section icon="case" title="Caso clínico">
+        <Section icon="case" title="Caso clínico" tone="steel">
           <ClinicalCase caso={data.caso} />
         </Section>
       )}
 
       {/* Repaso rápido */}
       {data.quickReview.length > 0 && (
-        <Section icon="badge" title="Repaso rápido">
+        <Section icon="badge" title="Repaso rápido" tone="mint">
           <QuickReview points={data.quickReview} />
         </Section>
       )}
 
       {/* Contenido pendiente */}
       {data.pendiente && (
-        <div className="rounded-xl border border-dashed border-navy-700/70 bg-navy-900/40 px-5 py-8 text-center text-sm text-ink-300">
-          Contenido detallado de este módulo en construcción. La estructura ya está lista para
-          poblarse con el mismo formato del Día 1.
-        </div>
+        <EmptyState
+          icon="layers"
+          tone="steel"
+          status="En desarrollo"
+          title="Contenido detallado en construcción"
+        >
+          La estructura de este módulo ya está lista para poblarse con el mismo formato del Día 1:
+          objetivos, temas nucleares, perlas clínicas, errores frecuentes, caso y repaso rápido.
+        </EmptyState>
       )}
 
       {/* Acción + navegación entre días */}
-      <div className="flex flex-col gap-4 border-t border-navy-700/50 pt-6 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col gap-4 border-t border-slate-700/50 pt-6 sm:flex-row sm:items-center sm:justify-between">
         <CompleteButton completo={completo} onToggle={() => toggle(data.dia)} />
         <div className="flex items-center gap-2">
-          <button
-            type="button"
+          <Button
+            variant="secondary"
+            size="sm"
             disabled={!prev}
             onClick={() => prev && navigate(`/temario/${prev.dia}`)}
-            className="inline-flex items-center gap-1.5 rounded-lg border border-navy-700 px-3 py-2 text-sm text-ink-300 transition-colors hover:bg-navy-800 disabled:opacity-40"
+            icon="back"
           >
-            <Icon name="back" size={14} />
             Día {data.dia - 1}
-          </button>
-          <button
-            type="button"
+          </Button>
+          <Button
+            variant="secondary"
+            size="sm"
             disabled={!next}
             onClick={() => next && navigate(`/temario/${next.dia}`)}
-            className="inline-flex items-center gap-1.5 rounded-lg border border-navy-700 px-3 py-2 text-sm text-ink-300 transition-colors hover:bg-navy-800 disabled:opacity-40"
+            iconRight="arrow"
           >
             Día {data.dia + 1}
-            <Icon name="arrow" size={14} />
-          </button>
+          </Button>
         </div>
       </div>
     </div>

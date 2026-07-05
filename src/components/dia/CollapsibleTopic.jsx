@@ -7,27 +7,35 @@ export default function CollapsibleTopic({ titulo, puntos = [], defaultOpen = fa
   const empty = puntos.length === 0
 
   return (
-    <div className="overflow-hidden rounded-xl border border-navy-700/60 bg-navy-800/60">
+    <div
+      className={[
+        'overflow-hidden rounded-xl border bg-slate-800/60 transition-colors duration-200',
+        open ? 'border-slate-600' : 'border-slate-700/60',
+      ].join(' ')}
+    >
       <button
         type="button"
         onClick={() => !empty && setOpen((o) => !o)}
         aria-expanded={open}
         disabled={empty}
-        className="flex w-full items-center gap-3 px-4 py-3.5 text-left transition-colors hover:bg-navy-800 disabled:cursor-default disabled:opacity-60"
+        className="flex w-full items-center gap-3 px-4 py-3.5 text-left transition-colors hover:bg-slate-800 disabled:cursor-default disabled:opacity-60"
       >
-        <Icon
-          name="chevron"
-          size={16}
-          className={`shrink-0 text-icu-400 transition-transform duration-300 ${
-            open ? 'rotate-90' : ''
-          }`}
-        />
-        <span className="flex-1 text-[15px] font-medium text-ink-100">{titulo}</span>
-        {empty ? (
-          <span className="font-mono text-[11px] text-ink-400">pendiente</span>
-        ) : (
-          <span className="font-mono text-[11px] text-ink-400">{puntos.length}</span>
-        )}
+        <span
+          className={[
+            'grid h-6 w-6 shrink-0 place-items-center rounded-md transition-colors',
+            open ? 'bg-steel-soft text-steel-300' : 'text-ink-400',
+          ].join(' ')}
+        >
+          <Icon
+            name="chevron"
+            size={15}
+            className={`transition-transform duration-300 ${open ? 'rotate-90' : ''}`}
+          />
+        </span>
+        <span className="flex-1 text-[14.5px] font-medium text-ink-100">{titulo}</span>
+        <span className="font-mono text-[11px] tabular text-ink-400">
+          {empty ? 'pendiente' : puntos.length}
+        </span>
       </button>
 
       <div
@@ -35,10 +43,13 @@ export default function CollapsibleTopic({ titulo, puntos = [], defaultOpen = fa
         style={{ gridTemplateRows: open ? '1fr' : '0fr' }}
       >
         <div className="overflow-hidden">
-          <ul className="space-y-2.5 px-4 pb-4 pl-11">
+          <ul className="space-y-2.5 px-4 pb-4 pl-[52px]">
             {puntos.map((p, i) => (
-              <li key={i} className="flex items-start gap-2.5 text-sm leading-relaxed text-ink-200">
-                <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-icu-500" />
+              <li
+                key={i}
+                className="flex items-start gap-3 text-[13.5px] leading-relaxed text-ink-200"
+              >
+                <span className="mt-[9px] h-1 w-1 shrink-0 rounded-full bg-steel-400" />
                 {p}
               </li>
             ))}

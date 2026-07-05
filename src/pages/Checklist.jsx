@@ -9,9 +9,18 @@ export default function Checklist() {
         title="Checklist"
         description="Listas de verificación de procedimientos y competencias por módulo: valoración hemodinámica, ajuste ventilatorio, protocolo de sepsis y más."
       />
-      <EmptyState icon="check" title="Checklists en construcción">
-        Aquí vivirán las listas de verificación por día con seguimiento de avance. El estado se
-        guardará localmente en el navegador (localStorage) en la siguiente iteración.
+      <EmptyState
+        icon="check"
+        title="Checklists en construcción"
+        preview={[
+          { icon: 'target', text: 'Valoración hemodinámica y respuesta a volumen' },
+          { icon: 'pulse', text: 'Ajuste de ventilación protectora' },
+          { icon: 'flame', text: 'Paquete de la primera hora en sepsis' },
+          { icon: 'badge', text: 'Seguimiento de avance persistente (localStorage)' },
+        ]}
+      >
+        Listas de verificación por día con seguimiento de avance. El estado se guardará localmente
+        en el navegador en la siguiente iteración.
       </EmptyState>
     </div>
   )

@@ -1,4 +1,5 @@
-// Iconos SVG en línea (stroke). Sin dependencias externas.
+// Iconos SVG en línea (stroke, 24×24). Sin dependencias externas.
+// Trazo 1.75 por defecto para una estética afilada y clínica.
 const PATHS = {
   grid: 'M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z',
   book: 'M4 5a2 2 0 0 1 2-2h12v16H6a2 2 0 0 0-2 2zM6 3v14',
@@ -7,7 +8,8 @@ const PATHS = {
   library: 'M4 4v16M9 4v16M14 5l5 15M4 8h5M4 14h5',
   stethoscope:
     'M6 3v6a5 5 0 0 0 10 0V3M6 3H4m2 0h2m6 0h2m-2 0h-2M11 19a3 3 0 1 0 6 0v-3M17 16a2 2 0 1 1 0-4 2 2 0 0 1 0 4z',
-  clipboard: 'M9 4h6a1 1 0 0 1 1 1v1H8V5a1 1 0 0 1 1-1zM8 5H6a1 1 0 0 0-1 1v13a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1h-2M9 12l2 2 4-4',
+  clipboard:
+    'M9 4h6a1 1 0 0 1 1 1v1H8V5a1 1 0 0 1 1-1zM8 5H6a1 1 0 0 0-1 1v13a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1h-2M9 12l2 2 4-4',
   pulse: 'M2 12h4l2-6 4 12 2-6h8',
   arrow: 'M5 12h14M13 6l6 6-6 6',
   back: 'M19 12H5M11 18l-6-6 6-6',
@@ -20,9 +22,18 @@ const PATHS = {
   alert: 'M12 9v4M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z',
   case: 'M9 6V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v1m5 0H4a1 1 0 0 0-1 1v11a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7a1 1 0 0 0-1-1z',
   list: 'M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01',
+  // — Nuevos
+  gem: 'M6 3h12l3 6-9 12L3 9zM3 9h18M9 3 6 9l6 12M15 3l3 6-6 12',
+  menu: 'M3 6h18M3 12h18M3 18h18',
+  close: 'M6 6l12 12M18 6 6 18',
+  plus: 'M12 5v14M5 12h14',
+  dot: 'M12 12h.01',
+  layers: 'M12 3 3 8l9 5 9-5-9-5zM3 13l9 5 9-5M3 17l9 5 9-5',
+  compass: 'M12 21a9 9 0 1 1 0-18 9 9 0 0 1 0 18zM15.5 8.5 13 13l-4.5 2.5L11 11z',
+  flame: 'M12 3c1.5 3 4 4.5 4 8a4 4 0 0 1-8 0c0-1 .3-1.8.8-2.5C9.8 9.7 11 8.5 12 3z',
 }
 
-export default function Icon({ name, className = '', size = 18, strokeWidth = 1.8 }) {
+export default function Icon({ name, className = '', size = 18, strokeWidth = 1.75 }) {
   const d = PATHS[name] || PATHS.grid
   return (
     <svg
