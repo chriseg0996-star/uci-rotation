@@ -11,9 +11,9 @@ export default function Temario() {
   return (
     <div>
       <PageHeader
-        kicker="Currículo"
-        title="Temario"
-        description="Currículo de 8 módulos temáticos de UCI. Cada módulo abre su propia página con introducción, lecciones nucleares, perlas clínicas, errores frecuentes, habilidades, caso interactivo, autoevaluación y referencias."
+        kicker="Currículo clínico"
+        title="Módulos clínicos"
+        description="8 módulos temáticos de UCI. Completa antes el Inicio de la Rotación. Cada módulo abre su propia página con introducción, lecciones nucleares, perlas clínicas, errores frecuentes, habilidades, caso interactivo, autoevaluación y referencias."
         right={
           <div className="hidden w-48 sm:block">
             <StatCard

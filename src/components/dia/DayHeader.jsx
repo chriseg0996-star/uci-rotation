@@ -1,7 +1,7 @@
 import Icon from '../Icon.jsx'
 import Badge from '../Badge.jsx'
 
-export default function DayHeader({ dia, titulo, tiempoEstimado, completo }) {
+export default function DayHeader({ dia, titulo, tiempoEstimado, completo, eyebrow, icon }) {
   return (
     <header className="relative overflow-hidden rounded-2xl border border-slate-700/60 bg-gradient-to-br from-slate-800 to-slate-850 p-6 shadow-card sm:p-7">
       {/* Trazo de monitor: firma visual de la unidad */}
@@ -31,11 +31,11 @@ export default function DayHeader({ dia, titulo, tiempoEstimado, completo }) {
               : 'bg-steel-400 text-slate-900 shadow-steel-400/20',
           ].join(' ')}
         >
-          {completo ? <Icon name="badge" size={26} /> : dia}
+          {completo ? <Icon name="badge" size={26} /> : icon ? <Icon name={icon} size={26} /> : dia}
         </div>
         <div className="min-w-0 flex-1">
           <p className="text-[10.5px] font-semibold uppercase tracking-[0.18em] text-steel-400">
-            Módulo {dia}
+            {eyebrow ?? `Módulo ${dia}`}
           </p>
           <h1 className="mt-1.5 text-[24px] font-semibold leading-[1.12] tracking-tightest text-ink-100 sm:text-[28px]">
             {titulo}

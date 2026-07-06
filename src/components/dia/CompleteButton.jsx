@@ -1,6 +1,8 @@
 import Button from '../Button.jsx'
 
-export default function CompleteButton({ completo, onToggle }) {
+// `noun` permite reutilizar el botón para el onboarding ("Onboarding") o los módulos ("Módulo").
+export default function CompleteButton({ completo, onToggle, noun = 'Módulo' }) {
+  const lower = noun.toLowerCase()
   return (
     <Button
       variant={completo ? 'success' : 'primary'}
@@ -9,7 +11,7 @@ export default function CompleteButton({ completo, onToggle }) {
       icon={completo ? 'badge' : 'check'}
       className="w-full sm:w-auto"
     >
-      {completo ? 'Módulo completado — deshacer' : 'Marcar módulo completado'}
+      {completo ? `${noun} completado — deshacer` : `Marcar ${lower} completado`}
     </Button>
   )
 }

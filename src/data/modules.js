@@ -6,12 +6,13 @@
 
 export const NAV = [
   { key: 'dashboard', label: 'Dashboard', path: '/', icon: 'grid' },
-  { key: 'temario', label: 'Temario', path: '/temario', icon: 'book' },
-  { key: 'checklist', label: 'Checklist', path: '/checklist', icon: 'check' },
+  { key: 'inicio', label: 'Inicio de la Rotación', path: '/inicio', icon: 'compass' },
+  { key: 'temario', label: 'Módulos Clínicos', path: '/temario', icon: 'book' },
   { key: 'calculadoras', label: 'Calculadoras', path: '/calculadoras', icon: 'calc' },
   { key: 'biblioteca', label: 'Biblioteca', path: '/biblioteca', icon: 'library' },
   { key: 'casos', label: 'Casos clínicos', path: '/casos', icon: 'stethoscope' },
-  { key: 'evaluacion', label: 'Evaluación', path: '/evaluacion', icon: 'clipboard' },
+  { key: 'checklist', label: 'Checklist', path: '/checklist', icon: 'check' },
+  { key: 'evaluacion', label: 'Evaluación Final', path: '/evaluacion', icon: 'clipboard' },
 ]
 
 export const ROTATION = {
@@ -136,9 +137,3 @@ export const PROGRESS = [
   { key: 'casos', label: 'Casos clínicos', done: 0, total: MODULES.length, unit: 'casos' },
   { key: 'quizzes', label: 'Autoevaluaciones', done: 0, total: MODULES.length, unit: 'quizzes' },
 ]
-
-// Módulo de inicio recomendado del currículo.
-export const TODAY = {
-  dia: 1,
-  objetivo: MODULES[0].objetivo,
-}

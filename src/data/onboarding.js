@@ -1,44 +1,111 @@
-// Módulo 1 — Neuromonitoreo.
-// PLACEHOLDER TEMPORAL: mientras se desarrolla el contenido de Neuromonitoreo, este
-// módulo reutiliza el contenido de "Evaluación inicial del paciente crítico" para
-// mantener operativo el motor educativo (lecciones, checklist, caso, quiz, referencias).
-// Esquema modular reutilizable por los Módulos 2–8.
+// Inicio de la Rotación — sección de onboarding obligatoria antes del currículo clínico.
+// Reúne los fundamentos de cuidados críticos (antes ubicados en el Módulo 1) reutilizando
+// el mismo motor educativo: lecciones, perlas, errores, habilidades, caso, quiz y referencias.
+// Español clínico, nivel intensivista senior. Sin relleno.
 
-const dia1 = {
-  dia: 1,
-  titulo: 'Neuromonitoreo',
+const onboarding = {
+  id: 'inicio',
+  titulo: 'Inicio de la Rotación',
+  resumen:
+    'Onboarding obligatorio: fundamentos, ABCDE, evaluación inicial, priorización, pase de visita y monitorización básica antes de entrar al currículo clínico.',
   tiempoEstimado: '90–120 min',
 
-  // 1 — Introducción: por qué importa
+  // Introducción: por qué importa
   intro: {
     texto: [
-      'La evaluación inicial es el punto donde se decide la trayectoria del paciente crítico. Las intervenciones de la primera hora —asegurar la vía aérea, corregir la hipoxemia, restaurar la perfusión, iniciar el antimicrobiano correcto— pesan más sobre el desenlace que casi cualquier decisión posterior en la unidad. El residente rotante suele ser quien ve primero al paciente que se deteriora; su capacidad de estructurar el abordaje y de reconocer la amenaza vital determina si esa ventana se aprovecha o se pierde.',
+      'Antes de entrar a los módulos clínicos, todo residente rotante debe dominar los fundamentos que se aplican a cualquier paciente crítico, sin importar el diagnóstico. Este onboarding entrena ese sustrato común: cómo pensar, cómo evaluar y cómo comunicar en la UCI.',
+      'Las intervenciones de la primera hora —asegurar la vía aérea, corregir la hipoxemia, restaurar la perfusión, iniciar el tratamiento correcto— pesan más sobre el desenlace que casi cualquier decisión posterior. El residente suele ser quien ve primero al paciente que se deteriora; su capacidad de estructurar el abordaje y reconocer la amenaza vital determina si esa ventana se aprovecha o se pierde.',
       'El error dominante en el novato no es la falta de conocimiento, sino la ausencia de método bajo presión: fijarse en un dato llamativo, perseguir cifras en lugar de fisiología y normalizar la presión arterial sin evaluar si hay flujo. Un abordaje sistemático (ABCDE), repetido y priorizado por lo que mata primero, convierte una escena caótica en una secuencia de decisiones defendibles.',
-      'Este módulo entrena el reflejo que distingue al intensivista: tratar la amenaza en el momento en que se detecta, razonar en términos de entrega y consumo de oxígeno, y reevaluar tras cada intervención. Presión no es perfusión; el monitor no es el paciente; y la reanimación se guía por respuesta, no por protocolo ciego.',
     ],
     claves: [
-      'La primera hora define la trayectoria: reconocer y actuar temprano cambia el desenlace.',
+      'Completa este onboarding antes de iniciar los módulos clínicos.',
       'El método (ABCDE) previene el error de fijación bajo estrés.',
       'Guía la reanimación por perfusión —lactato, llenado capilar, moteado— no por la presión aislada.',
       'Reevaluar tras cada intervención es parte del diagnóstico, no un paso opcional.',
     ],
   },
 
-  // 2 — Objetivos de aprendizaje (6)
+  // Objetivos de aprendizaje (6)
   objetivos: [
     'Ejecutar un abordaje ABCDE sistemático, tratando cada amenaza vital en el momento en que se detecta.',
     'Reconocer al paciente críticamente enfermo y el shock oculto por signos de hipoperfusión, no solo por la presión arterial.',
     'Establecer prioridades de estabilización en la primera hora guiadas por perfusión y respuesta dinámica a volumen.',
-    'Seleccionar e interpretar la monitorización adecuada al nivel de gravedad, incluyendo POCUS y parámetros de perfusión.',
+    'Seleccionar e interpretar la monitorización básica adecuada al nivel de gravedad, incluyendo POCUS y parámetros de perfusión.',
     'Aplicar razonamiento clínico estructurado, reconociendo sesgos cognitivos y manejando la incertidumbre.',
     'Presentar al paciente crítico por sistemas en el pase de visita, con un plan orientado a metas del día.',
   ],
 
-  // 3 — Lecciones nucleares (7 secciones)
+  // Lecciones nucleares del onboarding (9)
   lecciones: [
     {
+      id: 'bienvenida',
+      titulo: 'Bienvenido a la UCI',
+      intro:
+        'La UCI es un entorno de alta densidad de decisiones y bajo margen de error. Antes de la fisiología, importan la seguridad del paciente, el trabajo en equipo y una forma disciplinada de trabajar.',
+      bloques: [
+        {
+          subtitulo: 'Tu rol en la unidad',
+          puntos: [
+            'El residente rotante es parte del equipo: observa, propone y ejecuta bajo supervisión, y comunica de forma cerrada.',
+            'Pedir ayuda temprano no es debilidad: la escalada oportuna es una competencia, no un fracaso.',
+            'La seguridad del paciente está por encima de la jerarquía: si algo no cuadra, dilo.',
+          ],
+        },
+        {
+          subtitulo: 'Cultura y seguridad',
+          puntos: [
+            'Higiene de manos, verificación de identidad y de procedimientos, y uso de checklists reducen daño evitable.',
+            'Cultura justa: se reportan errores y cuasi-fallos para aprender del sistema, no para culpar a la persona.',
+            'Prevención por defecto: profilaxis tromboembólica y de úlcera de estrés, y revisión diaria de la necesidad de catéteres.',
+          ],
+        },
+        {
+          subtitulo: 'Cómo usar este onboarding',
+          puntos: [
+            'Recorre las lecciones, marca las habilidades a demostrar a pie de cama y resuelve el caso interactivo.',
+            'Cierra con la autoevaluación; completa el onboarding antes de avanzar a los módulos clínicos.',
+          ],
+        },
+      ],
+      clave: 'Completa este onboarding antes de entrar al currículo clínico de la unidad.',
+    },
+    {
+      id: 'pensar-intensivista',
+      titulo: 'Cómo pensar como intensivista',
+      intro:
+        'El razonamiento en cuidados críticos combina el reconocimiento rápido de patrones con el análisis fisiológico deliberado. Conocer los sesgos propios es parte de la competencia técnica.',
+      bloques: [
+        {
+          subtitulo: 'Dos sistemas y sus sesgos',
+          puntos: [
+            'Sistema 1 (intuitivo, veloz) y Sistema 2 (analítico, lento): el experto alterna entre ambos y sabe cuándo desconfiar del reflejo.',
+            'Sesgos frecuentes: anclaje (fijarse en el primer diagnóstico), cierre prematuro, disponibilidad (el último caso visto) y confirmación (buscar solo lo que apoya la hipótesis).',
+            'Antídoto: formular explícitamente un diagnóstico diferencial y buscar activamente datos que lo refuten.',
+          ],
+        },
+        {
+          subtitulo: 'Razonamiento fisiológico',
+          puntos: [
+            'Pensar en términos de entrega (DO₂ = GC × CaO₂) y consumo (VO₂) de oxígeno, y de PA = gasto cardíaco × resistencias.',
+            'Ante hipotensión, descomponer: ¿problema de precarga, de contractilidad, de resistencia o de obstrucción? La conducta cambia con la respuesta.',
+            'Prueba terapéutica (trial of therapy): tratar lo reversible mientras se completa el diagnóstico, con un punto de reevaluación definido.',
+          ],
+        },
+        {
+          subtitulo: 'Incertidumbre y metacognición',
+          puntos: [
+            'Reevaluar tras cada intervención: ¿respondió como esperaba? Si no, reformular la hipótesis en lugar de repetir la maniobra.',
+            'Comunicar la incertidumbre de forma explícita al equipo y a la familia mejora la seguridad y la toma de decisiones.',
+            'La ausencia de respuesta esperada es información diagnóstica, no un fracaso a ignorar.',
+          ],
+        },
+      ],
+      clave:
+        'Trata lo reversible mientras diagnosticas, pero define siempre cuándo y cómo reevaluar; la falta de respuesta es un dato, no un ruido.',
+    },
+    {
       id: 'abcde',
-      titulo: 'Abordaje ABCDE',
+      titulo: 'ABCDE',
       intro:
         'Secuencia jerárquica que ordena la evaluación por lo que amenaza la vida más rápido. Es cíclica: se reinicia tras cada intervención y ante cualquier deterioro. La regla de oro es tratar el problema en el momento en que se identifica, no al terminar el recorrido.',
       bloques: [
@@ -90,10 +157,10 @@ const dia1 = {
         'ABCDE no es una lista para recitar sino un bucle: cada intervención obliga a reiniciar el recorrido desde A.',
     },
     {
-      id: 'reconocimiento',
-      titulo: 'Reconocimiento del paciente críticamente enfermo',
+      id: 'evaluacion-inicial',
+      titulo: 'Evaluación inicial del paciente crítico',
       intro:
-        'El deterioro fisiológico casi siempre precede al colapso por horas. Reconocerlo temprano —y creer en los signos de hipoperfusión aunque la presión “se vea bien”— es lo que separa la reanimación oportuna del rescate tardío.',
+        'El deterioro fisiológico casi siempre precede al colapso por horas. Reconocerlo temprano —y estabilizar de forma simultánea al diagnóstico— separa la reanimación oportuna del rescate tardío.',
       bloques: [
         {
           subtitulo: 'Las tres ventanas de la perfusión',
@@ -104,117 +171,33 @@ const dia1 = {
           ],
         },
         {
-          subtitulo: 'Shock oculto (críptico)',
+          subtitulo: 'Shock oculto (críptico) y fenotipos',
           puntos: [
             'Hipoperfusión con presión arterial aún normal: la vasoconstricción compensadora mantiene la PA a costa del flujo.',
             'Lactato >2 mmol/L con normotensión obliga a buscar activamente la causa; no esperar a la hipotensión para actuar.',
-            'La presión arterial es una variable tardía: cae cuando los mecanismos de compensación ya están agotados.',
+            'Fenotipos a pie de cama: distributivo (caliente, VCI variable), hipovolémico (frío, VCI colapsable), cardiogénico (congestión, VCI distendida) y obstructivo (taponamiento, TEP, neumotórax a tensión).',
           ],
         },
         {
-          subtitulo: 'Fenotipos de shock a pie de cama',
+          subtitulo: 'Estabilización simultánea',
           puntos: [
-            'Distributivo (séptico, anafiláctico, neurogénico): extremidades típicamente calientes al inicio, presión de pulso amplia, VCI variable.',
-            'Hipovolémico/hemorrágico: frío, colapso de VCI, respuesta a volumen.',
-            'Cardiogénico: ingurgitación yugular, congestión pulmonar, VCI distendida, contractilidad reducida en POCUS.',
-            'Obstructivo (taponamiento, TEP, neumotórax a tensión): VCI distendida con hipotensión; requiere intervención dirigida inmediata.',
+            'Oxigenación y vía aérea primero; dos accesos periféricos gruesos; lactato, gasometría y cultivos sin retrasar el tratamiento.',
+            'Cristaloides balanceados en bolos de 250–500 mL reevaluando respuesta con índices dinámicos; evitar bolos ciegos y la sobrecarga hídrica.',
+            'Noradrenalina de primera línea para PAM ≥65 mmHg, iniciándola por vía periférica gruesa si el acceso central se demora.',
+            'Control de foco y reevaluación a las 2 h: aclaramiento de lactato, llenado capilar y estado mental orientan si escalar o desescalar.',
           ],
         },
         {
           subtitulo: 'Escalas y criterios de ingreso',
           puntos: [
-            'NEWS2 para detectar deterioro en piso; qSOFA (≥2) como tamizaje de mal pronóstico en sospecha de infección, no como diagnóstico de sepsis.',
+            'NEWS2 para detectar deterioro en piso; qSOFA (≥2) como tamizaje de mal pronóstico, no como diagnóstico de sepsis.',
             'SOFA para cuantificar disfunción orgánica y pronóstico; APACHE II para estratificación al ingreso.',
-            'Criterios de UCI: necesidad de soporte orgánico (vasopresor, ventilación, TRR), monitorización invasiva o trayectoria de deterioro pese al tratamiento inicial.',
+            'Criterios de UCI: necesidad de soporte orgánico, monitorización invasiva o trayectoria de deterioro pese al tratamiento inicial.',
           ],
         },
       ],
       clave:
         'Cree en la hipoperfusión aunque la presión sea normal: el lactato y el llenado capilar delatan el shock antes de que caiga la PA.',
-    },
-    {
-      id: 'estabilizacion',
-      titulo: 'Estabilización inicial',
-      intro:
-        'La reanimación es simultánea, no secuencial: mientras se evalúa se trata, idealmente en equipo con roles asignados. El objetivo de la primera hora es restaurar la entrega de oxígeno a los tejidos y controlar la causa.',
-      bloques: [
-        {
-          subtitulo: 'Prioridades inmediatas',
-          puntos: [
-            'Oxigenación y vía aérea primero: asegurar SpO₂ y ventilación antes de perseguir la presión.',
-            'Dos accesos periféricos gruesos; no demorar el vasopresor esperando el acceso central.',
-            'Extraer lactato, gasometría, hemocultivos (si sospecha de infección) y estudios basales sin retrasar el tratamiento.',
-          ],
-        },
-        {
-          subtitulo: 'Fluidoterapia',
-          puntos: [
-            'Cristaloides balanceados (Ringer/Plasma-Lyte) preferibles al salino 0,9% por menor acidosis hiperclorémica.',
-            'Bolos de 250–500 mL reevaluando respuesta con índices dinámicos; no administrar bolos ciegos repetidos.',
-            'La sobrecarga hídrica es iatrogenia: edema tisular, deterioro de la oxigenación y peor desenlace. Cada bolo requiere justificación.',
-          ],
-        },
-        {
-          subtitulo: 'Vasopresores y objetivos',
-          puntos: [
-            'Noradrenalina como primera línea; objetivo inicial de PAM ≥65 mmHg, individualizando más alto solo en hipertensión crónica documentada.',
-            'Iniciar noradrenalina por vía periférica gruesa si el acceso central se demora, para no retrasar la restauración de la presión de perfusión.',
-            'Vasopresina como ahorrador; adrenalina o inotrópico según fenotipo (p. ej. dobutamina en componente cardiogénico).',
-          ],
-        },
-        {
-          subtitulo: 'Causa y reevaluación',
-          puntos: [
-            'Antimicrobiano empírico de amplio espectro en <1 h ante sospecha de sepsis; el control de foco (drenaje, cirugía, retiro de dispositivo) es tan crítico como el antibiótico.',
-            'Definir metas de reanimación y reevaluar a las 2 h: aclaramiento de lactato, llenado capilar y estado mental orientan si escalar o desescalar.',
-            'Documentar objetivos y contingencias; una reanimación sin puntos de reevaluación es una reanimación a ciegas.',
-          ],
-        },
-      ],
-      clave:
-        'Restaura la entrega de oxígeno y controla el foco; luego reevalúa a las 2 h. El aclaramiento de lactato manda sobre el valor absoluto.',
-    },
-    {
-      id: 'monitorizacion',
-      titulo: 'Monitorización en UCI',
-      intro:
-        'La monitorización debe escalar con la gravedad y responder a una pregunta clínica concreta. Ningún número sustituye la exploración de la perfusión; el objetivo es tratar al paciente, no al monitor.',
-      bloques: [
-        {
-          subtitulo: 'Monitorización básica',
-          puntos: [
-            'ECG continuo, SpO₂, presión arterial (no invasiva vs. línea arterial), temperatura y diuresis horaria.',
-            'Capnografía: confirma la posición del tubo, detecta hipoventilación y refleja gasto cardíaco durante la reanimación.',
-            'Indicaciones de línea arterial: inestabilidad hemodinámica, uso de vasopresores o gasometrías frecuentes.',
-          ],
-        },
-        {
-          subtitulo: 'Parámetros de perfusión',
-          puntos: [
-            'Lactato inicial y su aclaramiento a las 2 h como marcador dinámico de reanimación.',
-            'ScvO₂ y gap venoarterial de CO₂ (>6 mmHg sugiere flujo insuficiente respecto a la demanda).',
-            'Llenado capilar como diana de reanimación: en shock séptico es tan válido como el lactato y responde más rápido (ANDROMEDA-SHOCK).',
-          ],
-        },
-        {
-          subtitulo: 'POCUS y hemodinámica avanzada',
-          puntos: [
-            'Protocolo RUSH: bomba (contractilidad, derrame), tanque (VCI, líneas B, líquido libre) y tuberías (aorta, TVP).',
-            'La VCI y su variabilidad orientan la precarga, con las limitaciones conocidas (ventilación, presión abdominal).',
-            'Monitorización avanzada del gasto cardíaco (termodilución, análisis de onda de pulso, ecocardiografía seriada) cuando la trayectoria es incierta o la respuesta a volumen es dudosa.',
-          ],
-        },
-        {
-          subtitulo: 'Limitaciones e interpretación',
-          puntos: [
-            'La PVC no predice respuesta a volumen; útil solo como tendencia y en contexto, nunca como meta única.',
-            'Distinguir señal de artefacto: una alarma sin correlato clínico es un dato para verificar, no para tratar.',
-            'La respuesta a volumen se demuestra con índices dinámicos (VPP/VVS con sus condiciones, elevación pasiva de piernas), no con una cifra estática.',
-          ],
-        },
-      ],
-      clave:
-        'Cada monitor debe responder una pregunta; si no cambia tu conducta, no lo interpretes de forma aislada. Trata al paciente, no al número.',
     },
     {
       id: 'priorizacion',
@@ -243,59 +226,17 @@ const dia1 = {
         'Ordena por lo que mata primero, no por lo que llama más la atención; y reordena tras cada intervención.',
     },
     {
-      id: 'razonamiento',
-      titulo: 'Razonamiento clínico',
-      intro:
-        'El razonamiento en cuidados críticos combina el reconocimiento rápido de patrones con el análisis fisiológico deliberado. Conocer los sesgos propios es parte de la competencia técnica.',
-      bloques: [
-        {
-          subtitulo: 'Dos sistemas y sus sesgos',
-          puntos: [
-            'Sistema 1 (intuitivo, veloz) y Sistema 2 (analítico, lento): el experto alterna entre ambos y sabe cuándo desconfiar del reflejo.',
-            'Sesgos frecuentes: anclaje (fijarse en el primer diagnóstico), cierre prematuro, disponibilidad (el último caso visto) y confirmación (buscar solo lo que apoya la hipótesis).',
-            'Antídoto: formular explícitamente un diagnóstico diferencial y buscar activamente datos que lo refuten.',
-          ],
-        },
-        {
-          subtitulo: 'Razonamiento fisiológico',
-          puntos: [
-            'Pensar en términos de entrega (DO₂ = GC × CaO₂) y consumo (VO₂) de oxígeno, y de PA = gasto cardíaco × resistencias.',
-            'Ante hipotensión, descomponer: ¿problema de precarga, de contractilidad, de resistencia o de obstrucción? La conducta cambia con la respuesta.',
-            'Prueba terapéutica (trial of therapy): tratar lo reversible mientras se completa el diagnóstico, con un punto de reevaluación definido.',
-          ],
-        },
-        {
-          subtitulo: 'Incertidumbre y metacognición',
-          puntos: [
-            'Reevaluar tras cada intervención: ¿respondió como esperaba? Si no, reformular la hipótesis en lugar de repetir la maniobra.',
-            'Comunicar la incertidumbre de forma explícita al equipo y a la familia mejora la seguridad y la toma de decisiones.',
-            'La ausencia de respuesta esperada es información diagnóstica, no un fracaso a ignorar.',
-          ],
-        },
-      ],
-      clave:
-        'Trata lo reversible mientras diagnosticas, pero define siempre cuándo y cómo reevaluar; la falta de respuesta es un dato, no un ruido.',
-    },
-    {
       id: 'pase-visita',
-      titulo: 'Presentación en el pase de visita (ICU rounds)',
+      titulo: 'Pase de visita',
       intro:
-        'El pase de visita traduce el estado del paciente en un plan de acción compartido. Una presentación por sistemas, concisa y orientada a metas, es una competencia clínica en sí misma.',
+        'El pase de visita traduce el estado del paciente en un plan de acción compartido. Un recorrido por sistemas, conciso y orientado a metas, es una competencia clínica en sí misma.',
       bloques: [
         {
-          subtitulo: 'Estructura de la presentación',
+          subtitulo: 'Estructura por sistemas',
           puntos: [
             'Encabezado: identificación, día de estancia en UCI y un enunciado de síntesis (one-liner) que capture el problema dominante.',
             'Eventos de las últimas 24 h y luego recorrido sistema por sistema: neurológico, respiratorio, cardiovascular, renal/metabólico, gastrointestinal/nutrición, infectología/hematología, endocrino, piel/accesos y social/familia.',
             'Por cada sistema: datos objetivos relevantes → evaluación → plan, no una lectura cruda de números.',
-          ],
-        },
-        {
-          subtitulo: 'Datos que no deben faltar',
-          puntos: [
-            'Parámetros ventilatorios (modo, Vt, PEEP, driving pressure, FiO₂), vasopresores con dosis, balances y diuresis.',
-            'Cultivos y antibióticos con día de tratamiento; catéteres y dispositivos con indicación y fecha.',
-            'Profilaxis (tromboembólica y de úlcera de estrés), analgosedación y cribado de delirium.',
           ],
         },
         {
@@ -308,11 +249,112 @@ const dia1 = {
         },
       ],
       clave:
-        'Presenta por sistemas con un one-liner potente y cierra cada sistema con un plan orientado a metas del día, no con una lista de números.',
+        'Cierra cada sistema con un plan orientado a metas del día y criterios de desescalamiento, no con una lista de números.',
+    },
+    {
+      id: 'presentar-paciente',
+      titulo: 'Cómo presentar un paciente crítico',
+      intro:
+        'Una presentación efectiva no es un volcado de datos: es una historia clínica comprimida que lleva al equipo a un plan. La forma importa tanto como el contenido.',
+      bloques: [
+        {
+          subtitulo: 'El enunciado de síntesis (one-liner)',
+          puntos: [
+            'Una sola frase: edad, antecedente relevante, día de UCI y problema dominante. Ejemplo: “Varón de 62 años, DM2, día 1 de UCI por shock séptico de foco pulmonar”.',
+            'El one-liner orienta a todo el equipo antes de cualquier dato; si está bien construido, ya sugiere el plan.',
+          ],
+        },
+        {
+          subtitulo: 'Qué datos incluir',
+          puntos: [
+            'Parámetros ventilatorios (modo, Vt, PEEP, driving pressure, FiO₂), vasopresores con dosis, balances y diuresis.',
+            'Cultivos y antibióticos con día de tratamiento; catéteres y dispositivos con indicación y fecha.',
+            'Profilaxis (tromboembólica y de úlcera de estrés), analgosedación y cribado de delirium.',
+          ],
+        },
+        {
+          subtitulo: 'Comunicación efectiva',
+          puntos: [
+            'Concisión: presenta lo relevante y omite el ruido; el objetivo es una decisión, no una transcripción.',
+            'Cierra con el plan por sistema y verbaliza las contingencias (“si X, entonces Y”).',
+            'Comunicación cerrada: confirma que el receptor entendió y quién ejecuta cada acción.',
+          ],
+        },
+      ],
+      clave:
+        'Un buen pase convierte datos en un plan de acción compartido: empieza por un one-liner potente y termina por metas y responsables.',
+    },
+    {
+      id: 'monitorizacion-basica',
+      titulo: 'Monitorización básica',
+      intro:
+        'La monitorización debe escalar con la gravedad y responder a una pregunta clínica concreta. Ningún número sustituye la exploración de la perfusión; el objetivo es tratar al paciente, no al monitor.',
+      bloques: [
+        {
+          subtitulo: 'Monitorización estándar',
+          puntos: [
+            'ECG continuo, SpO₂, presión arterial (no invasiva vs. línea arterial), temperatura y diuresis horaria.',
+            'Capnografía: confirma la posición del tubo, detecta hipoventilación y refleja gasto cardíaco durante la reanimación.',
+            'Indicaciones de línea arterial: inestabilidad hemodinámica, uso de vasopresores o gasometrías frecuentes.',
+          ],
+        },
+        {
+          subtitulo: 'Parámetros de perfusión',
+          puntos: [
+            'Lactato inicial y su aclaramiento a las 2 h como marcador dinámico de reanimación.',
+            'ScvO₂ y gap venoarterial de CO₂ (>6 mmHg sugiere flujo insuficiente respecto a la demanda).',
+            'Llenado capilar como diana de reanimación: en shock séptico es tan válido como el lactato y responde más rápido (ANDROMEDA-SHOCK).',
+          ],
+        },
+        {
+          subtitulo: 'POCUS orientado y límites',
+          puntos: [
+            'Protocolo RUSH: bomba (contractilidad, derrame), tanque (VCI, líneas B, líquido libre) y tuberías (aorta, TVP).',
+            'La PVC no predice respuesta a volumen; útil solo como tendencia y en contexto, nunca como meta única.',
+            'La respuesta a volumen se demuestra con índices dinámicos (elevación pasiva de piernas, VPP/VVS con sus condiciones), no con una cifra estática.',
+          ],
+        },
+      ],
+      clave:
+        'Cada monitor debe responder una pregunta; si no cambia tu conducta, no lo interpretes de forma aislada. Trata al paciente, no al número.',
+    },
+    {
+      id: 'objetivos-rotacion',
+      titulo: 'Objetivos de la rotación',
+      intro:
+        'La rotación de UCI busca que el residente adquiera un método de trabajo transferible a cualquier paciente crítico, sobre el cual se construyen los módulos clínicos temáticos.',
+      bloques: [
+        {
+          subtitulo: 'Competencias esperadas',
+          puntos: [
+            'Reconocer y estabilizar al paciente crítico con un abordaje ABCDE sistemático y guiado por perfusión.',
+            'Razonar fisiológicamente y manejar la incertidumbre reconociendo los sesgos propios.',
+            'Comunicar con eficacia en el pase de visita y presentar por sistemas con un plan orientado a metas.',
+            'Integrarse al equipo con seguridad del paciente, profilaxis por defecto y escalada oportuna.',
+          ],
+        },
+        {
+          subtitulo: 'Estructura del currículo',
+          puntos: [
+            'Este onboarding sienta los fundamentos comunes; después comienzan los módulos clínicos temáticos.',
+            'Módulos clínicos: Neuromonitoreo, Sepsis, Ventilación (bases y programación), Retiro de la ventilación, Choque y monitoreo hemodinámico, Ácido-base, Protocolo ECO (VExUS/BLUE/FAST) y Poliurias.',
+            'Cada módulo reutiliza el mismo formato: introducción, lecciones, perlas, errores, habilidades, caso interactivo, autoevaluación y referencias.',
+          ],
+        },
+        {
+          subtitulo: 'Público objetivo',
+          puntos: [
+            'Diseñada para Medicina Interna R3, Urgencias R3 y Anestesiología R2 que rotan por la unidad.',
+            'Demuestra las habilidades a pie de cama; el conocimiento se consolida en la práctica supervisada, no solo en la lectura.',
+          ],
+        },
+      ],
+      clave:
+        'Completa el onboarding, avanza por los módulos clínicos y demuestra cada habilidad a pie de cama.',
     },
   ],
 
-  // 4 — ICU Pearls (≥10)
+  // ICU Pearls
   pearls: [
     'Lactato >2 mmol/L con hipotensión es hipoperfusión hasta demostrar lo contrario. Repite a 2–4 h: el aclaramiento manda sobre el valor absoluto.',
     'El llenado capilar >3 s predice desenlace tan bien como el lactato y responde más rápido a la reanimación (ANDROMEDA-SHOCK).',
@@ -328,7 +370,7 @@ const dia1 = {
     'El control de foco no controlado anula cualquier reanimación: el mejor antibiótico no drena un absceso.',
   ],
 
-  // 5 — Errores frecuentes (≥10)
+  // Errores frecuentes
   errores: [
     'Perseguir la PVC como meta de reanimación: no predice respuesta a volumen.',
     'Bolos de líquido repetidos sin reevaluar respuesta → sobrecarga hídrica, edema tisular y peor desenlace.',
@@ -344,7 +386,7 @@ const dia1 = {
     'Iniciar antimicrobiano sin plantear el control de foco ni tomar cultivos previos cuando es posible.',
   ],
 
-  // 6 — Checklist de habilidades prácticas
+  // Checklist de habilidades prácticas
   skills: [
     { texto: 'Realizar un abordaje ABCDE completo y verbalizado en un paciente inestable.' },
     {
@@ -356,9 +398,7 @@ const dia1 = {
       texto: 'Interpretar una gasometría arterial inicial',
       detalle: 'Oxigenación, ventilación y estado ácido-base con brecha aniónica.',
     },
-    {
-      texto: 'Ejecutar una elevación pasiva de piernas e interpretar la respuesta a volumen.',
-    },
+    { texto: 'Ejecutar una elevación pasiva de piernas e interpretar la respuesta a volumen.' },
     {
       texto: 'Titular noradrenalina hacia una PAM objetivo',
       detalle: 'Incluye la opción de inicio periférico si el acceso central se demora.',
@@ -377,7 +417,7 @@ const dia1 = {
     { texto: 'Presentar al paciente por sistemas en el pase de visita con plan orientado a metas.' },
   ],
 
-  // 7 — Caso clínico interactivo (revelación progresiva con razonamiento)
+  // Caso clínico interactivo
   caso: {
     titulo: 'Choque en el paciente febril',
     contexto:
@@ -498,7 +538,7 @@ const dia1 = {
     ],
   },
 
-  // 8 — Quiz (10 preguntas, opción múltiple)
+  // Autoevaluación (10 preguntas)
   quiz: [
     {
       pregunta:
@@ -627,7 +667,7 @@ const dia1 = {
     },
   ],
 
-  // 9 — Referencias (preparadas para citación futura)
+  // Referencias
   referencias: [
     {
       titulo: 'Surviving Sepsis Campaign: International Guidelines for Management of Sepsis and Septic Shock 2021',
@@ -636,8 +676,7 @@ const dia1 = {
       tipo: 'guia',
     },
     {
-      titulo:
-        'The Third International Consensus Definitions for Sepsis and Septic Shock (Sepsis-3)',
+      titulo: 'The Third International Consensus Definitions for Sepsis and Septic Shock (Sepsis-3)',
       fuente: 'Singer M, et al. JAMA',
       anio: 2016,
       tipo: 'consenso',
@@ -668,12 +707,6 @@ const dia1 = {
       tipo: 'revision',
     },
     {
-      titulo: 'Effect of Early Vasopressin (peripheral) Initiation in Septic Shock — principios de titulación de noradrenalina',
-      fuente: 'Surviving Sepsis Campaign / literatura de vasopresores',
-      anio: 2021,
-      tipo: 'guia',
-    },
-    {
       titulo: 'National Early Warning Score (NEWS2): Standardising the Assessment of Acute-Illness Severity',
       fuente: 'Royal College of Physicians',
       anio: 2017,
@@ -687,7 +720,7 @@ const dia1 = {
     },
   ],
 
-  // Repaso rápido (5 puntos para llevar)
+  // Repaso rápido
   quickReview: [
     'ABCDE primero: trata cada amenaza vital en el momento en que la encuentras.',
     'Presión no es perfusión: guíate por lactato, llenado capilar y moteado.',
@@ -697,4 +730,4 @@ const dia1 = {
   ],
 }
 
-export default dia1
+export default onboarding

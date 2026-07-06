@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router-dom'
 import Layout from './components/Layout.jsx'
 import Dashboard from './pages/Dashboard.jsx'
+import Inicio from './pages/Inicio.jsx'
 import Temario from './pages/Temario.jsx'
 import DiaDetail from './pages/DiaDetail.jsx'
 import Checklist from './pages/Checklist.jsx'
@@ -14,6 +15,7 @@ export default function App() {
     <Routes>
       <Route element={<Layout />}>
         <Route index element={<Dashboard />} />
+        <Route path="inicio" element={<Inicio />} />
         <Route path="temario" element={<Temario />} />
         <Route path="temario/:dia" element={<DiaDetail />} />
         <Route path="checklist" element={<Checklist />} />
