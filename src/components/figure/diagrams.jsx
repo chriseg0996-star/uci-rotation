@@ -273,6 +273,141 @@ function HemodynamicTank() {
   )
 }
 
+// — Volumen control vs Presión control (flujo inspiratorio)
+function VcVsPc() {
+  return (
+    <svg viewBox="0 0 440 210" {...svgProps}>
+      {[
+        { ox: 20, tone: C.steel, tit: 'Volumen control', sub: 'flujo constante (cuadrado)', d: 'M40 150 L40 92 L150 92 L150 150 C168 150 182 168 196 150' },
+        { ox: 220, tone: C.pearl, tit: 'Presión control', sub: 'flujo desacelerado', d: 'M40 150 L40 84 C70 84 120 138 150 150 C168 150 182 168 196 150' },
+      ].map((p, i) => (
+        <g key={i} transform={`translate(${p.ox},0)`}>
+          <line x1="40" y1="150" x2="210" y2="150" stroke={C.grid} strokeWidth="1.5" />
+          <text x="40" y="34" fill={p.tone} fontSize="13" fontWeight="600">{p.tit}</text>
+          <text x="40" y="50" fill={C.ink4} fontSize="10.5">Flujo–tiempo</text>
+          <path d={p.d} fill="none" stroke={p.tone} strokeWidth="2.5" strokeLinejoin="round" strokeLinecap="round" />
+          <text x="120" y="184" fill={C.ink3} fontSize="10.5" textAnchor="middle">{p.sub}</text>
+        </g>
+      ))}
+    </svg>
+  )
+}
+
+// — Driving pressure: Pmeseta − PEEP
+function DrivingPressure() {
+  return (
+    <svg viewBox="0 0 440 240" {...svgProps}>
+      <line x1="96" y1="30" x2="96" y2="214" stroke={C.grid} strokeWidth="1.5" />
+      <text x="30" y="120" fill={C.ink3} fontSize="12" transform="rotate(-90 30 120)" textAnchor="middle">Presión (cmH₂O)</text>
+      {/* Barra PEEP */}
+      <rect x="150" y="168" width="110" height="46" fill={C.steel} opacity="0.28" stroke={C.steel} strokeWidth="1.5" />
+      {/* Barra ΔP */}
+      <rect x="150" y="72" width="110" height="96" fill={C.pearl} opacity="0.22" stroke={C.pearl} strokeWidth="1.5" />
+      {/* Líneas guía */}
+      <line x1="96" y1="168" x2="300" y2="168" stroke={C.grid} strokeWidth="1" strokeDasharray="4 4" />
+      <line x1="96" y1="72" x2="300" y2="72" stroke={C.grid} strokeWidth="1" strokeDasharray="4 4" />
+      <text x="308" y="172" fill={C.steel} fontSize="11">PEEP</text>
+      <text x="308" y="76" fill={C.pearl} fontSize="11">Pmeseta</text>
+      <text x="205" y="124" fill={C.ink} fontSize="12" fontWeight="600" textAnchor="middle">ΔP</text>
+      <text x="205" y="196" fill={C.ink3} fontSize="10.5" textAnchor="middle">PEEP</text>
+      <text x="205" y="232" fill={C.ink4} fontSize="10.5" textAnchor="middle">ΔP = Pmeseta − PEEP · objetivo ≤15</text>
+    </svg>
+  )
+}
+
+// — Compliance estática: pendiente de la curva presión–volumen
+function ComplianceDiagram() {
+  return (
+    <svg viewBox="0 0 440 260" {...svgProps}>
+      <line x1="70" y1="30" x2="70" y2="216" stroke={C.grid} strokeWidth="1.5" />
+      <line x1="70" y1="216" x2="400" y2="216" stroke={C.grid} strokeWidth="1.5" />
+      <text x="28" y="130" fill={C.ink3} fontSize="12" transform="rotate(-90 28 130)" textAnchor="middle">Volumen</text>
+      <text x="235" y="248" fill={C.ink3} fontSize="12" textAnchor="middle">Presión</text>
+      {/* Línea de compliance */}
+      <line x1="110" y1="196" x2="330" y2="70" stroke={C.steel} strokeWidth="3" strokeLinecap="round" />
+      {/* ΔP (run) y ΔV (rise) */}
+      <line x1="110" y1="196" x2="330" y2="196" stroke={C.pearl} strokeWidth="1.5" strokeDasharray="4 3" />
+      <line x1="330" y1="196" x2="330" y2="70" stroke={C.mint} strokeWidth="1.5" strokeDasharray="4 3" />
+      <text x="220" y="212" fill={C.pearl} fontSize="11" textAnchor="middle">ΔP (Pmeseta − PEEP)</text>
+      <text x="346" y="135" fill={C.mint} fontSize="11">Vt</text>
+      <text x="120" y="205" fill={C.ink4} fontSize="10">PEEP</text>
+      <text x="235" y="52" fill={C.ink4} fontSize="10.5" textAnchor="middle">Crs = Vt / ΔP · normal 50–70 mL/cmH₂O</text>
+    </svg>
+  )
+}
+
+// — Ondas básicas del ventilador
+function VentWaveforms() {
+  const rows = [
+    { y: 20, tone: C.mint, tit: 'Normal', kind: 'flow', d: 'M40 60 L40 28 L120 28 L120 60 C150 60 150 92 180 92 C220 92 240 62 260 60 L380 60' },
+    { y: 110, tone: C.terra, tit: 'Obstrucción · auto-PEEP', kind: 'flow', d: 'M40 150 L40 118 L110 118 L110 150 C138 150 150 176 176 178 L188 178 L188 118 L258 118 L258 150 C286 150 300 176 322 178 L332 178' },
+    { y: 200, tone: C.pearl, tit: 'Baja compliance · presiones altas', kind: 'pres', d: 'M40 258 L40 208 L70 200 L200 200 L200 258 L230 258 L230 208 L260 200 L390 200' },
+  ]
+  return (
+    <svg viewBox="0 0 440 290" {...svgProps}>
+      {rows.map((r, i) => (
+        <g key={i}>
+          <line x1="40" y1={r.y + 40} x2="390" y2={r.y + 40} stroke={C.grid} strokeWidth="1" />
+          <text x="40" y={r.y + 8} fill={r.tone} fontSize="11.5" fontWeight="600">{r.tit}</text>
+          <path d={r.d} fill="none" stroke={r.tone} strokeWidth="2.2" strokeLinejoin="round" strokeLinecap="round" />
+          {r.tit.includes('auto-PEEP') && (
+            <text x="330" y={r.y + 62} fill={C.terra} fontSize="9.5">flujo esp. no vuelve a 0</text>
+          )}
+          <text x="398" y={r.y + 44} fill={C.ink4} fontSize="9" textAnchor="end">{r.kind === 'pres' ? 'presión' : 'flujo'}</text>
+        </g>
+      ))}
+    </svg>
+  )
+}
+
+// — Asincronías paciente–ventilador
+function Asynchrony() {
+  return (
+    <svg viewBox="0 0 440 210" {...svgProps}>
+      {[
+        { ox: 10, tone: C.terra, tit: 'Doble disparo', d: 'M40 130 L40 70 L78 70 L78 130 L82 130 L82 66 L120 66 L120 130 L200 130', note: 'dos ciclos apilados' },
+        { ox: 220, tone: C.pearl, tit: 'Esfuerzo inefectivo', d: 'M40 130 L40 74 L96 74 L96 130 C120 130 128 118 140 122 C150 126 156 130 200 130', note: 'muesca sin ciclo' },
+      ].map((p, i) => (
+        <g key={i} transform={`translate(${p.ox},0)`}>
+          <line x1="40" y1="130" x2="200" y2="130" stroke={C.grid} strokeWidth="1.5" />
+          <text x="40" y="34" fill={p.tone} fontSize="12.5" fontWeight="600">{p.tit}</text>
+          <text x="40" y="50" fill={C.ink4} fontSize="10">Presión–tiempo</text>
+          <path d={p.d} fill="none" stroke={p.tone} strokeWidth="2.3" strokeLinejoin="round" strokeLinecap="round" />
+          <text x="120" y="164" fill={C.ink3} fontSize="10" textAnchor="middle">{p.note}</text>
+        </g>
+      ))}
+    </svg>
+  )
+}
+
+// — Potencia mecánica (concepto)
+function MechanicalPower() {
+  const chips = [
+    { x: 40, y: 40, t: 'Vt' },
+    { x: 40, y: 100, t: 'ΔP' },
+    { x: 40, y: 160, t: 'PEEP' },
+    { x: 320, y: 60, t: 'Frecuencia' },
+    { x: 320, y: 140, t: 'Flujo' },
+  ]
+  return (
+    <svg viewBox="0 0 440 240" {...svgProps}>
+      {/* Nodo central */}
+      <rect x="160" y="86" width="120" height="60" rx="14" fill={C.pearl} opacity="0.14" stroke={C.pearl} strokeWidth="1.8" />
+      <text x="220" y="112" fill={C.pearl} fontSize="13" fontWeight="600" textAnchor="middle">Potencia</text>
+      <text x="220" y="130" fill={C.pearl} fontSize="13" fontWeight="600" textAnchor="middle">mecánica</text>
+      {chips.map((c, i) => (
+        <g key={i}>
+          <rect x={c.x} y={c.y} width="80" height="30" rx="8" fill={C.surface} stroke={C.steel} strokeWidth="1.3" />
+          <text x={c.x + 40} y={c.y + 20} fill={C.ink2} fontSize="12" textAnchor="middle">{c.t}</text>
+          <line x1={c.x < 200 ? c.x + 80 : c.x} y1={c.y + 15} x2={c.x < 200 ? 160 : 280} y2="116" stroke={C.ink4} strokeWidth="1.2" strokeDasharray="3 3" />
+        </g>
+      ))}
+      <text x="220" y="196" fill={C.ink3} fontSize="10.5" textAnchor="middle">≈ 0,098 × FR × Vt × (Ppico − ½ΔP)</text>
+      <text x="220" y="214" fill={C.ink4} fontSize="10.5" textAnchor="middle">umbral de riesgo de VILI ~17 J/min</text>
+    </svg>
+  )
+}
+
 export const DIAGRAMS = {
   'monro-kellie': MonroKellie,
   'icp-waveform': IcpWaveform,
@@ -282,6 +417,12 @@ export const DIAGRAMS = {
   'frank-starling': FrankStarling,
   'shock-phenotypes': ShockPhenotypes,
   'hemodynamic-tank': HemodynamicTank,
+  'vc-vs-pc': VcVsPc,
+  'driving-pressure': DrivingPressure,
+  compliance: ComplianceDiagram,
+  'vent-waveforms': VentWaveforms,
+  asynchrony: Asynchrony,
+  'mechanical-power': MechanicalPower,
 }
 
 export default DIAGRAMS

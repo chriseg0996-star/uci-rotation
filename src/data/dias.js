@@ -8,11 +8,13 @@
 import { MODULES } from './modules.js'
 import neuromonitoreo from './modules/neuromonitoreo.js'
 import sepsis from './modules/sepsis.js'
+import ventilacion from './modules/ventilacion.js'
 
 // Módulos con contenido completo. El resto adopta el esqueleto de secciones.
 const DETAILED = {
   1: neuromonitoreo,
   2: sepsis,
+  3: ventilacion,
 }
 
 // Convierte un módulo base (MODULES) en un esqueleto con el esquema de secciones.

@@ -2,7 +2,7 @@ import Icon from '../Icon.jsx'
 
 // OVERVIEW — resumen de una pantalla. Responde “¿qué necesito saber AHORA?”.
 // overview = { porque, definiciones:[{termino,texto}], conceptos:[], normales:[{param,valor}],
-//              redFlags:[], acciones:[], bundle:[] }
+//              redFlags:[], acciones:[], bundle:[], bundleTitulo?, reevaluar:[] }
 function Panel({ icon, title, tone = 'steel', children, className = '' }) {
   const chip = {
     steel: 'bg-steel-soft text-steel-300 ring-steel-400/20',
@@ -109,14 +109,28 @@ export default function Overview({ overview }) {
         </Panel>
       )}
 
-      {/* Paquete inicial */}
+      {/* Paquete / programación inicial */}
       {overview.bundle?.length > 0 && (
-        <Panel icon="check" title="Paquete inicial (1 h)" tone="mint">
+        <Panel icon="check" title={overview.bundleTitulo || 'Paquete inicial (1 h)'} tone="mint">
           <ul className="grid gap-2 sm:grid-cols-2">
             {overview.bundle.map((b, i) => (
               <li key={i} className="flex items-start gap-2.5 text-[13px] leading-snug text-ink-200">
                 <Icon name="check" size={14} strokeWidth={2.2} className="mt-0.5 shrink-0 text-mint-300" />
                 {b}
+              </li>
+            ))}
+          </ul>
+        </Panel>
+      )}
+
+      {/* Reevaluar en 15 min */}
+      {overview.reevaluar?.length > 0 && (
+        <Panel icon="clock" title="Reevaluar en 15 min" tone="steel">
+          <ul className="grid gap-2 sm:grid-cols-2">
+            {overview.reevaluar.map((r, i) => (
+              <li key={i} className="flex items-start gap-2.5 text-[13px] leading-snug text-ink-200">
+                <Icon name="clock" size={14} className="mt-0.5 shrink-0 text-steel-300" />
+                {r}
               </li>
             ))}
           </ul>

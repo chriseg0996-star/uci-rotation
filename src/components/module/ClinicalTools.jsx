@@ -218,12 +218,233 @@ function QsofaCalculator() {
   )
 }
 
+function SexToggle({ value, onChange }) {
+  return (
+    <div className="grid grid-cols-2 gap-2">
+      {[
+        ['H', 'Hombre'],
+        ['M', 'Mujer'],
+      ].map(([v, l]) => (
+        <button
+          key={v}
+          type="button"
+          onClick={() => onChange(v)}
+          aria-pressed={value === v}
+          className={[
+            'rounded-lg border px-3 py-2 text-[13px] font-medium transition-colors',
+            value === v
+              ? 'border-steel-400/40 bg-steel-soft text-steel-300'
+              : 'border-slate-700 bg-slate-900/50 text-ink-300 hover:border-slate-600',
+          ].join(' ')}
+        >
+          {l}
+        </button>
+      ))}
+    </div>
+  )
+}
+
+function pcp(sexo, cm) {
+  const base = sexo === 'M' ? 45.5 : 50
+  return base + 0.91 * (cm - 152.4)
+}
+
+function PbwCalculator() {
+  const [sexo, setSexo] = useState('H')
+  const [cm, setCm] = useState('')
+  const h = parseFloat(cm)
+  const ok = !isNaN(h) && h > 0
+  const pbw = ok ? Math.round(pcp(sexo, h)) : null
+  return (
+    <div className="grid gap-3">
+      <SexToggle value={sexo} onChange={setSexo} />
+      <Field label="Talla" unit="cm" value={cm} onChange={setCm} />
+      <Result value={pbw} unit="kg" tone={ok ? 'steel' : 'idle'} interpretacion={ok ? `Vt 6 mL/kg ≈ ${Math.round(pbw * 6)} mL` : 'Introduce sexo y talla'} />
+      <p className="text-[11px] text-ink-400">PCP = {`{50♂ / 45,5♀}`} + 0,91·(talla − 152,4).</p>
+    </div>
+  )
+}
+
+function TidalVolumeCalculator() {
+  const [pbw, setPbw] = useState('')
+  const [mlkg, setMlkg] = useState('6')
+  const p = parseFloat(pbw)
+  const m = parseFloat(mlkg)
+  const ok = !isNaN(p) && !isNaN(m)
+  const vt = ok ? Math.round(p * m) : null
+  let tone = 'idle'
+  let txt = 'Introduce PCP y mL/kg'
+  if (ok) {
+    if (m <= 8 && m >= 4) {
+      tone = m <= 6 ? 'mint' : 'pearl'
+      txt = m <= 6 ? 'Protector (≤6 mL/kg)' : 'Aceptable (4–8 mL/kg)'
+    } else {
+      tone = 'terra'
+      txt = 'Fuera de rango protector'
+    }
+  }
+  return (
+    <div className="grid gap-3">
+      <div className="grid grid-cols-2 gap-3">
+        <Field label="PCP" unit="kg" value={pbw} onChange={setPbw} />
+        <Field label="Objetivo" unit="mL/kg" value={mlkg} onChange={setMlkg} />
+      </div>
+      <Result value={vt} unit="mL" tone={tone} interpretacion={txt} />
+      <p className="text-[11px] text-ink-400">Vt = PCP × mL/kg · protector 6 (rango 4–8).</p>
+    </div>
+  )
+}
+
+function DrivingPressureCalculator() {
+  const [pplat, setPplat] = useState('')
+  const [peep, setPeep] = useState('')
+  const a = parseFloat(pplat)
+  const b = parseFloat(peep)
+  const ok = !isNaN(a) && !isNaN(b)
+  const dp = ok ? Math.round(a - b) : null
+  let tone = 'idle'
+  let txt = 'Introduce Pmeseta y PEEP'
+  if (ok) {
+    if (dp <= 15) {
+      tone = 'mint'
+      txt = 'En objetivo (≤15)'
+    } else {
+      tone = 'terra'
+      txt = 'Elevado: riesgo de VILI (>15)'
+    }
+  }
+  return (
+    <div className="grid gap-3">
+      <div className="grid grid-cols-2 gap-3">
+        <Field label="Pmeseta" unit="cmH₂O" value={pplat} onChange={setPplat} />
+        <Field label="PEEP" unit="cmH₂O" value={peep} onChange={setPeep} />
+      </div>
+      <Result value={dp} unit="cmH₂O" tone={tone} interpretacion={txt} />
+      <p className="text-[11px] text-ink-400">ΔP = Pmeseta − PEEP · objetivo ≤15 cmH₂O.</p>
+    </div>
+  )
+}
+
+function ComplianceCalculator() {
+  const [vt, setVt] = useState('')
+  const [pplat, setPplat] = useState('')
+  const [peep, setPeep] = useState('')
+  const v = parseFloat(vt)
+  const a = parseFloat(pplat)
+  const b = parseFloat(peep)
+  const ok = !isNaN(v) && !isNaN(a) && !isNaN(b) && a - b > 0
+  const crs = ok ? Math.round(v / (a - b)) : null
+  let tone = 'idle'
+  let txt = 'Introduce Vt, Pmeseta y PEEP'
+  if (ok) {
+    if (crs >= 50) {
+      tone = 'mint'
+      txt = 'Normal (≥50)'
+    } else if (crs >= 30) {
+      tone = 'pearl'
+      txt = 'Reducida'
+    } else {
+      tone = 'terra'
+      txt = 'Baja (ARDS)'
+    }
+  }
+  return (
+    <div className="grid gap-3">
+      <div className="grid grid-cols-3 gap-3">
+        <Field label="Vt" unit="mL" value={vt} onChange={setVt} />
+        <Field label="Pmeseta" unit="cmH₂O" value={pplat} onChange={setPplat} />
+        <Field label="PEEP" unit="cmH₂O" value={peep} onChange={setPeep} />
+      </div>
+      <Result value={crs} unit="mL/cmH₂O" tone={tone} interpretacion={txt} />
+      <p className="text-[11px] text-ink-400">Crs = Vt / (Pmeseta − PEEP) · normal 50–70.</p>
+    </div>
+  )
+}
+
+function PfRatioCalculator() {
+  const [pao2, setPao2] = useState('')
+  const [fio2, setFio2] = useState('')
+  const p = parseFloat(pao2)
+  let f = parseFloat(fio2)
+  if (!isNaN(f) && f > 1) f = f / 100
+  const ok = !isNaN(p) && !isNaN(f) && f > 0
+  const pf = ok ? Math.round(p / f) : null
+  let tone = 'idle'
+  let txt = 'Introduce PaO₂ y FiO₂'
+  if (ok) {
+    if (pf >= 300) {
+      tone = 'mint'
+      txt = 'Sin ARDS (≥300)'
+    } else if (pf >= 200) {
+      tone = 'steel'
+      txt = 'ARDS leve (200–300)'
+    } else if (pf >= 100) {
+      tone = 'pearl'
+      txt = 'ARDS moderado (100–200)'
+    } else {
+      tone = 'terra'
+      txt = 'ARDS severo (<100)'
+    }
+  }
+  return (
+    <div className="grid gap-3">
+      <div className="grid grid-cols-2 gap-3">
+        <Field label="PaO₂" unit="mmHg" value={pao2} onChange={setPao2} />
+        <Field label="FiO₂" unit="0–1 o %" value={fio2} onChange={setFio2} />
+      </div>
+      <Result value={pf} unit="" tone={tone} interpretacion={txt} />
+      <p className="text-[11px] text-ink-400">PaO₂/FiO₂ · clasificación de Berlín (PEEP ≥5).</p>
+    </div>
+  )
+}
+
+function MechPowerCalculator() {
+  const [rr, setRr] = useState('')
+  const [vt, setVt] = useState('')
+  const [ppeak, setPpeak] = useState('')
+  const [pplat, setPplat] = useState('')
+  const [peep, setPeep] = useState('')
+  const [f, v, pk, pl, pe] = [rr, vt, ppeak, pplat, peep].map(parseFloat)
+  const ok = [f, v, pk, pl, pe].every((x) => !isNaN(x)) && v > 0
+  const mp = ok ? +(0.098 * f * (v / 1000) * (pk - 0.5 * (pl - pe))).toFixed(1) : null
+  let tone = 'idle'
+  let txt = 'Introduce los 5 parámetros'
+  if (ok) {
+    if (mp <= 17) {
+      tone = 'mint'
+      txt = 'Aceptable (≤17 J/min)'
+    } else {
+      tone = 'terra'
+      txt = 'Elevada: riesgo de VILI'
+    }
+  }
+  return (
+    <div className="grid gap-3">
+      <div className="grid grid-cols-2 gap-3">
+        <Field label="FR" unit="rpm" value={rr} onChange={setRr} />
+        <Field label="Vt" unit="mL" value={vt} onChange={setVt} />
+        <Field label="Ppico" unit="cmH₂O" value={ppeak} onChange={setPpeak} />
+        <Field label="Pmeseta" unit="cmH₂O" value={pplat} onChange={setPplat} />
+        <Field label="PEEP" unit="cmH₂O" value={peep} onChange={setPeep} />
+      </div>
+      <Result value={mp} unit="J/min" tone={tone} interpretacion={txt} />
+      <p className="text-[11px] text-ink-400">≈ 0,098 · FR · Vt · (Ppico − ½ΔP) · umbral ~17 J/min.</p>
+    </div>
+  )
+}
+
 const CALCS = {
   ppc: CppCalculator,
   lindegaard: LindegaardCalculator,
   map: MapCalculator,
   shockindex: ShockIndexCalculator,
   qsofa: QsofaCalculator,
+  pbw: PbwCalculator,
+  tidalvolume: TidalVolumeCalculator,
+  drivingpressure: DrivingPressureCalculator,
+  compliance: ComplianceCalculator,
+  pfratio: PfRatioCalculator,
+  mechpower: MechPowerCalculator,
 }
 
 function ToolCard({ icon, titulo, children }) {
