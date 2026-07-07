@@ -433,6 +433,193 @@ function MechPowerCalculator() {
   )
 }
 
+function RsbiCalculator() {
+  const [rr, setRr] = useState('')
+  const [vt, setVt] = useState('')
+  const f = parseFloat(rr)
+  const v = parseFloat(vt)
+  const ok = !isNaN(f) && !isNaN(v) && v > 0
+  const rsbi = ok ? Math.round(f / (v / 1000)) : null
+  let tone = 'idle'
+  let txt = 'Introduce FR y Vt'
+  if (ok) {
+    if (rsbi < 105) {
+      tone = 'mint'
+      txt = 'Favorable (<105)'
+    } else {
+      tone = 'terra'
+      txt = 'Desfavorable (≥105)'
+    }
+  }
+  return (
+    <div className="grid gap-3">
+      <div className="grid grid-cols-2 gap-3">
+        <Field label="FR" unit="rpm" value={rr} onChange={setRr} />
+        <Field label="Vt" unit="mL" value={vt} onChange={setVt} />
+      </div>
+      <Result value={rsbi} unit="resp/min/L" tone={tone} interpretacion={txt} />
+      <p className="text-[11px] text-ink-400">RSBI = FR / Vt(L) · &lt;105 predice éxito.</p>
+    </div>
+  )
+}
+
+function NifCalculator() {
+  const [nif, setNif] = useState('')
+  const n = Math.abs(parseFloat(nif))
+  const ok = !isNaN(n)
+  let tone = 'idle'
+  let txt = 'Introduce el NIF/MIP (magnitud)'
+  if (ok) {
+    if (n >= 30) {
+      tone = 'mint'
+      txt = 'Fuerza adecuada (≥30)'
+    } else if (n >= 25) {
+      tone = 'pearl'
+      txt = 'Límite (25–30)'
+    } else {
+      tone = 'terra'
+      txt = 'Débil (<25)'
+    }
+  }
+  return (
+    <div className="grid gap-3">
+      <Field label="NIF / MIP" unit="cmH₂O" value={nif} onChange={setNif} />
+      <Result value={ok ? `−${n}` : null} unit="cmH₂O" tone={tone} interpretacion={txt} />
+      <p className="text-[11px] text-ink-400">Favorable ≤ −25 a −30 cmH₂O (más negativo = más fuerza).</p>
+    </div>
+  )
+}
+
+function VitalCapacityCalculator() {
+  const [vc, setVc] = useState('')
+  const [pbw, setPbw] = useState('')
+  const v = parseFloat(vc)
+  const p = parseFloat(pbw)
+  const ok = !isNaN(v) && !isNaN(p) && p > 0
+  const mlkg = ok ? +(v / p).toFixed(1) : null
+  let tone = 'idle'
+  let txt = 'Introduce CV y PCP'
+  if (ok) {
+    if (mlkg >= 10) {
+      tone = 'mint'
+      txt = 'Favorable (≥10 mL/kg)'
+    } else {
+      tone = 'terra'
+      txt = 'Reducida (<10 mL/kg)'
+    }
+  }
+  return (
+    <div className="grid gap-3">
+      <div className="grid grid-cols-2 gap-3">
+        <Field label="Capacidad vital" unit="mL" value={vc} onChange={setVc} />
+        <Field label="PCP" unit="kg" value={pbw} onChange={setPbw} />
+      </div>
+      <Result value={mlkg} unit="mL/kg" tone={tone} interpretacion={txt} />
+      <p className="text-[11px] text-ink-400">CV / PCP · favorable ≥10 mL/kg.</p>
+    </div>
+  )
+}
+
+function P01Calculator() {
+  const [p01, setP01] = useState('')
+  const x = parseFloat(p01)
+  const ok = !isNaN(x)
+  let tone = 'idle'
+  let txt = 'Introduce el P0.1'
+  if (ok) {
+    if (x < 3.5) {
+      tone = 'mint'
+      txt = 'Impulso adecuado (<3,5)'
+    } else if (x <= 4) {
+      tone = 'pearl'
+      txt = 'Límite (3,5–4)'
+    } else {
+      tone = 'terra'
+      txt = 'Impulso alto (>4): riesgo de fracaso'
+    }
+  }
+  return (
+    <div className="grid gap-3">
+      <Field label="P0.1" unit="cmH₂O" value={p01} onChange={setP01} />
+      <Result value={ok ? x : null} unit="cmH₂O" tone={tone} interpretacion={txt} />
+      <p className="text-[11px] text-ink-400">P0.1 alto (&gt;3,5–4) sugiere impulso respiratorio elevado.</p>
+    </div>
+  )
+}
+
+function CuffLeakCalculator() {
+  const [vti, setVti] = useState('')
+  const [vte, setVte] = useState('')
+  const a = parseFloat(vti)
+  const b = parseFloat(vte)
+  const ok = !isNaN(a) && !isNaN(b) && a > 0
+  const leakMl = ok ? Math.round(a - b) : null
+  const leakPct = ok ? Math.round(((a - b) / a) * 100) : null
+  let tone = 'idle'
+  let txt = 'Introduce Vt inflado y desinflado'
+  if (ok) {
+    if (leakMl < 110 || leakPct < 10) {
+      tone = 'terra'
+      txt = `Fuga baja (${leakPct}%): riesgo de estridor`
+    } else {
+      tone = 'mint'
+      txt = `Fuga adecuada (${leakPct}%)`
+    }
+  }
+  return (
+    <div className="grid gap-3">
+      <div className="grid grid-cols-2 gap-3">
+        <Field label="Vt cuff inflado" unit="mL" value={vti} onChange={setVti} />
+        <Field label="Vt cuff desinflado" unit="mL" value={vte} onChange={setVte} />
+      </div>
+      <Result value={leakMl} unit="mL" tone={tone} interpretacion={txt} />
+      <p className="text-[11px] text-ink-400">Fuga = Vti − Vte · &lt;110 mL o &lt;10–15% → riesgo de estridor.</p>
+    </div>
+  )
+}
+
+function HighRiskExtubCalculator() {
+  const crit = [
+    'Edad >65 años',
+    'Cardiopatía / ICC',
+    'Enfermedad respiratoria crónica (EPOC)',
+    'VM >7 días',
+    'Tos débil / secreciones abundantes',
+    'Fracaso de SBT o extubación previa',
+  ]
+  const [c, setC] = useState(crit.map(() => false))
+  const score = c.filter(Boolean).length
+  const tone = score >= 2 ? 'terra' : score === 1 ? 'pearl' : 'mint'
+  const txt = score >= 2 ? 'Alto riesgo: soporte planificado' : score === 1 ? 'Riesgo intermedio' : 'Bajo riesgo'
+  return (
+    <div className="grid gap-3">
+      <div className="grid gap-2">
+        {crit.map((label, i) => (
+          <button
+            key={i}
+            type="button"
+            aria-pressed={c[i]}
+            onClick={() => setC((p) => p.map((x, j) => (j === i ? !x : x)))}
+            className="flex items-center gap-3 rounded-lg border border-slate-700 bg-slate-900/50 px-3 py-2 text-left text-[13px] text-ink-200 transition-colors hover:border-slate-600"
+          >
+            <span
+              className={[
+                'grid h-5 w-5 shrink-0 place-items-center rounded-md border transition-colors',
+                c[i] ? 'border-terra-400/50 bg-terra-soft text-terra-300' : 'border-slate-600 text-transparent',
+              ].join(' ')}
+            >
+              <Icon name="check" size={12} strokeWidth={2.4} />
+            </span>
+            {label}
+          </button>
+        ))}
+      </div>
+      <Result value={score} unit={`/ ${crit.length}`} tone={tone} interpretacion={txt} />
+      <p className="text-[11px] text-ink-400">≥2 factores → planifica soporte profiláctico (HFNC ± VNI).</p>
+    </div>
+  )
+}
+
 const CALCS = {
   ppc: CppCalculator,
   lindegaard: LindegaardCalculator,
@@ -445,6 +632,12 @@ const CALCS = {
   compliance: ComplianceCalculator,
   pfratio: PfRatioCalculator,
   mechpower: MechPowerCalculator,
+  rsbi: RsbiCalculator,
+  nif: NifCalculator,
+  vitalcapacity: VitalCapacityCalculator,
+  p01: P01Calculator,
+  cuffleak: CuffLeakCalculator,
+  highriskextub: HighRiskExtubCalculator,
 }
 
 function ToolCard({ icon, titulo, children }) {

@@ -408,6 +408,76 @@ function MechanicalPower() {
   )
 }
 
+// — Prueba de fuga del cuff (cuff inflado vs desinflado)
+function CuffLeak() {
+  const panel = (ox, tone, tit, inflado) => (
+    <g transform={`translate(${ox},0)`}>
+      {/* Pared traqueal */}
+      <line x1="40" y1="30" x2="40" y2="170" stroke={C.grid} strokeWidth="2" />
+      <line x1="160" y1="30" x2="160" y2="170" stroke={C.grid} strokeWidth="2" />
+      {/* Tubo endotraqueal */}
+      <rect x="92" y="20" width="16" height="150" fill={C.surface} stroke={C.steel} strokeWidth="1.5" />
+      {/* Cuff */}
+      {inflado ? (
+        <ellipse cx="100" cy="118" rx="58" ry="26" fill={tone} opacity="0.22" stroke={tone} strokeWidth="1.5" />
+      ) : (
+        <ellipse cx="100" cy="118" rx="26" ry="18" fill={tone} opacity="0.22" stroke={tone} strokeWidth="1.5" />
+      )}
+      {/* Flechas de aire */}
+      {inflado ? (
+        <path d="M100 40 v40" stroke={C.ink3} strokeWidth="2" markerEnd="url(#ca)" />
+      ) : (
+        <>
+          <path d="M64 150 v-34" stroke={tone} strokeWidth="2" markerEnd="url(#ca)" />
+          <path d="M136 150 v-34" stroke={tone} strokeWidth="2" markerEnd="url(#ca)" />
+        </>
+      )}
+      <text x="100" y="192" fill={tone} fontSize="12" fontWeight="600" textAnchor="middle">{tit}</text>
+    </g>
+  )
+  return (
+    <svg viewBox="0 0 440 220" {...svgProps}>
+      <defs>
+        <marker id="ca" markerWidth="8" markerHeight="8" refX="4" refY="6" orient="auto">
+          <path d="M0 0l4 6 4-6z" fill={C.ink3} />
+        </marker>
+      </defs>
+      {panel(10, C.steel, 'Cuff inflado · sellado', true)}
+      {panel(230, C.terra, 'Cuff desinflado · fuga', false)}
+      <text x="220" y="214" fill={C.ink4} fontSize="10.5" textAnchor="middle">Fuga = Vt insp − Vt esp · &lt;110 mL o &lt;10–15% → riesgo de estridor</text>
+    </svg>
+  )
+}
+
+// — Ecografía diafragmática: excursión y fracción de engrosamiento
+function DiaphragmUs() {
+  return (
+    <svg viewBox="0 0 440 230" {...svgProps}>
+      {/* Panel excursión */}
+      <text x="30" y="30" fill={C.steel} fontSize="12.5" fontWeight="600">Excursión</text>
+      <path d="M30 90 Q110 60 190 90" fill="none" stroke={C.ink4} strokeWidth="2" strokeDasharray="4 3" />
+      <path d="M30 130 Q110 104 190 130" fill="none" stroke={C.steel} strokeWidth="2.5" />
+      <line x1="110" y1="76" x2="110" y2="117" stroke={C.mint} strokeWidth="2" markerStart="url(#da)" markerEnd="url(#da)" />
+      <text x="120" y="100" fill={C.mint} fontSize="11">excursión</text>
+      <text x="30" y="150" fill={C.ink4} fontSize="10">espiración (punteada) → inspiración</text>
+      <text x="30" y="168" fill={C.ink3} fontSize="10.5" fontWeight="600">Favorable &gt;10–12 mm</text>
+      {/* Panel engrosamiento */}
+      <text x="250" y="30" fill={C.pearl} fontSize="12.5" fontWeight="600">Engrosamiento (TF)</text>
+      <rect x="270" y="70" width="60" height="10" fill={C.pearl} opacity="0.3" stroke={C.pearl} strokeWidth="1" />
+      <text x="345" y="79" fill={C.ink3} fontSize="10">esp. (Te)</text>
+      <rect x="270" y="110" width="60" height="26" fill={C.pearl} opacity="0.3" stroke={C.pearl} strokeWidth="1" />
+      <text x="345" y="127" fill={C.ink3} fontSize="10">insp. (Ti)</text>
+      <text x="250" y="176" fill={C.ink4} fontSize="10.5">TF = (Ti − Te) / Te</text>
+      <text x="250" y="194" fill={C.pearl} fontSize="10.5" fontWeight="600">Favorable &gt;30–36%</text>
+      <defs>
+        <marker id="da" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+          <path d="M0 4l4-4 4 4z" fill={C.mint} />
+        </marker>
+      </defs>
+    </svg>
+  )
+}
+
 export const DIAGRAMS = {
   'monro-kellie': MonroKellie,
   'icp-waveform': IcpWaveform,
@@ -423,6 +493,8 @@ export const DIAGRAMS = {
   'vent-waveforms': VentWaveforms,
   asynchrony: Asynchrony,
   'mechanical-power': MechanicalPower,
+  'cuff-leak': CuffLeak,
+  'diaphragm-us': DiaphragmUs,
 }
 
 export default DIAGRAMS
