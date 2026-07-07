@@ -192,12 +192,96 @@ function DtcDoppler() {
   )
 }
 
+// — Curva de Frank-Starling: respuesta a volumen
+function FrankStarling() {
+  return (
+    <svg viewBox="0 0 440 300" {...svgProps}>
+      <line x1="56" y1="30" x2="56" y2="256" stroke={C.grid} strokeWidth="1.5" />
+      <line x1="56" y1="256" x2="410" y2="256" stroke={C.grid} strokeWidth="1.5" />
+      <text x="16" y="150" fill={C.ink3} fontSize="12" transform="rotate(-90 16 150)" textAnchor="middle">
+        Volumen sistólico
+      </text>
+      <text x="233" y="288" fill={C.ink3} fontSize="12" textAnchor="middle">Precarga</text>
+      {/* Curva única: pendiente → meseta */}
+      <path d="M62 246 C110 240 150 150 196 112 C248 82 320 72 400 68" fill="none" stroke={C.steel} strokeWidth="3" strokeLinecap="round" />
+      {/* Punto A (respondedor, zona empinada) */}
+      <line x1="150" y1="256" x2="150" y2="150" stroke={C.mint} strokeWidth="1" strokeDasharray="3 3" />
+      <line x1="188" y1="256" x2="188" y2="118" stroke={C.mint} strokeWidth="1" strokeDasharray="3 3" />
+      <line x1="150" y1="150" x2="150" y2="118" stroke={C.mint} strokeWidth="3" />
+      <circle cx="150" cy="150" r="4" fill={C.mint} />
+      <text x="120" y="132" fill={C.mint} fontSize="11" textAnchor="middle" fontWeight="600">respondedor</text>
+      <text x="120" y="146" fill={C.ink4} fontSize="10" textAnchor="middle">ΔVS &gt;10–15%</text>
+      {/* Punto B (no respondedor, meseta) */}
+      <line x1="320" y1="256" x2="320" y2="72" stroke={C.terra} strokeWidth="1" strokeDasharray="3 3" />
+      <line x1="358" y1="256" x2="358" y2="69" stroke={C.terra} strokeWidth="1" strokeDasharray="3 3" />
+      <line x1="320" y1="72" x2="320" y2="69" stroke={C.terra} strokeWidth="3" />
+      <circle cx="320" cy="72" r="4" fill={C.terra} />
+      <text x="336" y="60" fill={C.terra} fontSize="11" textAnchor="middle" fontWeight="600">no respondedor</text>
+      <text x="336" y="252" fill={C.ink4} fontSize="10" textAnchor="middle">misma ΔPrecarga</text>
+    </svg>
+  )
+}
+
+// — Fenotipos de shock (cuatro cuadrantes con signos de cabecera)
+function ShockPhenotypes() {
+  const cell = (x, y, tone, titulo, signos) => (
+    <g>
+      <rect x={x} y={y} width="196" height="118" rx="12" fill={C.surface} stroke={tone} strokeWidth="1.5" opacity="0.95" />
+      <rect x={x} y={y} width="196" height="118" rx="12" fill={tone} opacity="0.06" />
+      <text x={x + 14} y={y + 26} fill={tone} fontSize="13" fontWeight="600">{titulo}</text>
+      {signos.map((s, i) => (
+        <text key={i} x={x + 14} y={y + 48 + i * 18} fill={C.ink2} fontSize="11">• {s}</text>
+      ))}
+    </g>
+  )
+  return (
+    <svg viewBox="0 0 440 280" {...svgProps}>
+      {cell(16, 16, C.terra, 'Distributivo', ['Caliente al inicio', 'RVS baja', 'VCI variable · lactato ↑'])}
+      {cell(228, 16, C.steel, 'Hipovolémico', ['Frío, colapso', 'VCI colapsable', 'Responde a volumen'])}
+      {cell(16, 146, C.pearl, 'Cardiogénico', ['Congestión, IY', 'VCI distendida', 'Contractilidad ↓'])}
+      {cell(228, 146, C.mint, 'Obstructivo', ['VCI distendida', 'Taponamiento / TEP', 'Neumotórax a tensión'])}
+    </svg>
+  )
+}
+
+// — Evaluación hemodinámica: tanque–bomba–tuberías (RUSH)
+function HemodynamicTank() {
+  const block = (x, tone, titulo, evalua, lever) => (
+    <g>
+      <rect x={x} y="40" width="112" height="96" rx="12" fill={C.surface} stroke={tone} strokeWidth="1.5" />
+      <rect x={x} y="40" width="112" height="96" rx="12" fill={tone} opacity="0.07" />
+      <text x={x + 56} y="66" fill={tone} fontSize="12.5" fontWeight="600" textAnchor="middle">{titulo}</text>
+      <text x={x + 56} y="90" fill={C.ink3} fontSize="10" textAnchor="middle">{evalua}</text>
+      <text x={x + 56} y="118" fill={C.ink2} fontSize="10.5" textAnchor="middle" fontWeight="600">{lever}</text>
+    </g>
+  )
+  return (
+    <svg viewBox="0 0 440 200" {...svgProps}>
+      {block(24, C.steel, 'Tanque', 'precarga · VCI', '→ Volumen')}
+      {block(164, C.pearl, 'Bomba', 'contractilidad · VI', '→ Inotrópico')}
+      {block(304, C.terra, 'Tuberías', 'RVS · tono', '→ Vasopresor')}
+      {/* Flechas de flujo */}
+      <path d="M136 88 h28" stroke={C.ink4} strokeWidth="2" markerEnd="url(#ah)" />
+      <path d="M276 88 h28" stroke={C.ink4} strokeWidth="2" markerEnd="url(#ah)" />
+      <defs>
+        <marker id="ah" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0 0l6 3-6 3z" fill={C.ink4} />
+        </marker>
+      </defs>
+      <text x="220" y="176" fill={C.ink4} fontSize="10.5" textAnchor="middle">POCUS RUSH: integra los tres para elegir la palanca correcta</text>
+    </svg>
+  )
+}
+
 export const DIAGRAMS = {
   'monro-kellie': MonroKellie,
   'icp-waveform': IcpWaveform,
   autoregulation: Autoregulation,
   herniation: Herniation,
   'dtc-doppler': DtcDoppler,
+  'frank-starling': FrankStarling,
+  'shock-phenotypes': ShockPhenotypes,
+  'hemodynamic-tank': HemodynamicTank,
 }
 
 export default DIAGRAMS

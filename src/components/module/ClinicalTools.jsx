@@ -120,7 +120,111 @@ function LindegaardCalculator() {
   )
 }
 
-const CALCS = { ppc: CppCalculator, lindegaard: LindegaardCalculator }
+function MapCalculator() {
+  const [pas, setPas] = useState('')
+  const [pad, setPad] = useState('')
+  const s = parseFloat(pas)
+  const d = parseFloat(pad)
+  const ok = !isNaN(s) && !isNaN(d)
+  const map = ok ? Math.round((s + 2 * d) / 3) : null
+  let tone = 'idle'
+  let txt = 'Introduce PAS y PAD'
+  if (ok) {
+    if (map < 65) {
+      tone = 'terra'
+      txt = 'Por debajo del objetivo (<65)'
+    } else {
+      tone = 'mint'
+      txt = 'En objetivo (≥65)'
+    }
+  }
+  return (
+    <div className="grid gap-3">
+      <div className="grid grid-cols-2 gap-3">
+        <Field label="PAS" unit="mmHg" value={pas} onChange={setPas} />
+        <Field label="PAD" unit="mmHg" value={pad} onChange={setPad} />
+      </div>
+      <Result value={map} unit="mmHg" tone={tone} interpretacion={txt} />
+      <p className="text-[11px] text-ink-400">PAM = (PAS + 2·PAD) / 3 · objetivo ≥65 mmHg.</p>
+    </div>
+  )
+}
+
+function ShockIndexCalculator() {
+  const [fc, setFc] = useState('')
+  const [pas, setPas] = useState('')
+  const f = parseFloat(fc)
+  const s = parseFloat(pas)
+  const ok = !isNaN(f) && !isNaN(s) && s > 0
+  const si = ok ? +(f / s).toFixed(2) : null
+  let tone = 'idle'
+  let txt = 'Introduce FC y PAS'
+  if (ok) {
+    if (si < 0.7) {
+      tone = 'mint'
+      txt = 'Normal'
+    } else if (si <= 1.0) {
+      tone = 'pearl'
+      txt = 'Elevado: sospecha hipoperfusión'
+    } else {
+      tone = 'terra'
+      txt = 'Alto riesgo (>1,0)'
+    }
+  }
+  return (
+    <div className="grid gap-3">
+      <div className="grid grid-cols-2 gap-3">
+        <Field label="FC" unit="lpm" value={fc} onChange={setFc} />
+        <Field label="PAS" unit="mmHg" value={pas} onChange={setPas} />
+      </div>
+      <Result value={si} unit="" tone={tone} interpretacion={txt} />
+      <p className="text-[11px] text-ink-400">Índice de shock = FC / PAS · &gt;0,9 sugiere hipoperfusión.</p>
+    </div>
+  )
+}
+
+function QsofaCalculator() {
+  const [c, setC] = useState([false, false, false])
+  const crit = ['FR ≥22/min', 'PAS ≤100 mmHg', 'Alteración del estado mental']
+  const score = c.filter(Boolean).length
+  const tone = score >= 2 ? 'terra' : 'mint'
+  const txt = score >= 2 ? 'Tamizaje positivo (≥2)' : 'Tamizaje negativo'
+  return (
+    <div className="grid gap-3">
+      <div className="grid gap-2">
+        {crit.map((label, i) => (
+          <button
+            key={i}
+            type="button"
+            aria-pressed={c[i]}
+            onClick={() => setC((p) => p.map((x, j) => (j === i ? !x : x)))}
+            className="flex items-center gap-3 rounded-lg border border-slate-700 bg-slate-900/50 px-3 py-2 text-left text-[13px] text-ink-200 transition-colors hover:border-slate-600"
+          >
+            <span
+              className={[
+                'grid h-5 w-5 shrink-0 place-items-center rounded-md border transition-colors',
+                c[i] ? 'border-terra-400/50 bg-terra-soft text-terra-300' : 'border-slate-600 text-transparent',
+              ].join(' ')}
+            >
+              <Icon name="check" size={12} strokeWidth={2.4} />
+            </span>
+            {label}
+          </button>
+        ))}
+      </div>
+      <Result value={score} unit="/ 3" tone={tone} interpretacion={txt} />
+      <p className="text-[11px] text-ink-400">qSOFA es tamizaje pronóstico, no diagnóstico de sepsis.</p>
+    </div>
+  )
+}
+
+const CALCS = {
+  ppc: CppCalculator,
+  lindegaard: LindegaardCalculator,
+  map: MapCalculator,
+  shockindex: ShockIndexCalculator,
+  qsofa: QsofaCalculator,
+}
 
 function ToolCard({ icon, titulo, children }) {
   return (

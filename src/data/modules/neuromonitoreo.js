@@ -506,6 +506,20 @@ const neuromonitoreo = {
     { titulo: 'Subarachnoid haemorrhage', fuente: 'Life in the Fast Lane (LITFL)', url: 'https://litfl.com/' },
     { titulo: 'Guidelines & resources', fuente: 'Neurocritical Care Society', url: 'https://www.neurocriticalcare.org/' },
   ],
+
+  // 🧠 ICU REASONING
+  reasoning: {
+    worries:
+      'El deterioro neurológico y los signos de herniación; una PIC en ascenso o una PPC que cae por debajo del objetivo.',
+    kills:
+      'La herniación por hipertensión intracraneal no tratada; en HSA, el resangrado del aneurisma no asegurado y el vasoespasmo/DCI.',
+    changes:
+      'La tendencia del examen (GCS/FOUR, pupilas/NPi), la PIC/PPC y la PbtO₂, y el Doppler transcraneal (Lindegaard) en HSA.',
+    trap:
+      'Atribuir el deterioro a la sedación y no descartar herniación, hidrocefalia o crisis no convulsivas.',
+    reassess:
+      'Examen neurológico seriado, PIC/PPC y la respuesta a la osmoterapia; en HSA, cualquier focalidad nueva entre los días 4 y 14.',
+  },
 }
 
 export default neuromonitoreo

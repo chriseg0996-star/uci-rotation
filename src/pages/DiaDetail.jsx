@@ -14,11 +14,13 @@ import Pitfalls from '../components/module/Pitfalls.jsx'
 import Evidence from '../components/module/Evidence.jsx'
 import ClinicalTools from '../components/module/ClinicalTools.jsx'
 import FurtherReading from '../components/module/FurtherReading.jsx'
+import IcuReasoning from '../components/module/IcuReasoning.jsx'
 import FigureGallery from '../components/figure/FigureGallery.jsx'
 import InteractiveCase from '../components/learn/InteractiveCase.jsx'
 
 const TABS = [
   { id: 'overview', label: 'Overview', icon: 'compass' },
+  { id: 'reasoning', label: 'Razonamiento', icon: 'brain' },
   { id: 'cards', label: 'Quick Cards', icon: 'layers' },
   { id: 'figures', label: 'Figuras', icon: 'image' },
   { id: 'highyield', label: 'High-Yield', icon: 'gem' },
@@ -33,6 +35,8 @@ function Section({ active, data }) {
   switch (active) {
     case 'overview':
       return data.overview ? <Overview overview={data.overview} /> : <SectionEmpty icon="compass" label="Overview" />
+    case 'reasoning':
+      return data.reasoning ? <IcuReasoning reasoning={data.reasoning} /> : <SectionEmpty icon="brain" label="Razonamiento clínico" />
     case 'cards':
       return data.quickCards?.length ? <QuickCards cards={data.quickCards} /> : <SectionEmpty icon="layers" label="Quick Cards" />
     case 'figures':

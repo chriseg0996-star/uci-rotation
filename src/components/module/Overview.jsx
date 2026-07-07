@@ -1,7 +1,8 @@
 import Icon from '../Icon.jsx'
 
 // OVERVIEW — resumen de una pantalla. Responde “¿qué necesito saber AHORA?”.
-// overview = { porque, conceptos:[], normales:[{param,valor}], redFlags:[], acciones:[] }
+// overview = { porque, definiciones:[{termino,texto}], conceptos:[], normales:[{param,valor}],
+//              redFlags:[], acciones:[], bundle:[] }
 function Panel({ icon, title, tone = 'steel', children, className = '' }) {
   const chip = {
     steel: 'bg-steel-soft text-steel-300 ring-steel-400/20',
@@ -34,6 +35,17 @@ export default function Overview({ overview }) {
             Por qué importa
           </p>
           <p className="mt-1.5 text-[14.5px] leading-relaxed text-ink-100">{overview.porque}</p>
+        </div>
+      )}
+
+      {/* Definiciones */}
+      {overview.definiciones?.length > 0 && (
+        <div className="grid gap-4 sm:grid-cols-2">
+          {overview.definiciones.map((d, i) => (
+            <Panel key={i} icon="book" title={d.termino} tone="steel">
+              <p className="text-[13px] leading-relaxed text-ink-200">{d.texto}</p>
+            </Panel>
+          ))}
         </div>
       )}
 
@@ -94,6 +106,20 @@ export default function Overview({ overview }) {
               </li>
             ))}
           </ol>
+        </Panel>
+      )}
+
+      {/* Paquete inicial */}
+      {overview.bundle?.length > 0 && (
+        <Panel icon="check" title="Paquete inicial (1 h)" tone="mint">
+          <ul className="grid gap-2 sm:grid-cols-2">
+            {overview.bundle.map((b, i) => (
+              <li key={i} className="flex items-start gap-2.5 text-[13px] leading-snug text-ink-200">
+                <Icon name="check" size={14} strokeWidth={2.2} className="mt-0.5 shrink-0 text-mint-300" />
+                {b}
+              </li>
+            ))}
+          </ul>
         </Panel>
       )}
     </div>
