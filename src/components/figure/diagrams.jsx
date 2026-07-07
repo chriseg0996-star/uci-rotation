@@ -478,6 +478,115 @@ function DiaphragmUs() {
   )
 }
 
+// — Perfusión vs. presión: PAM normal ≠ perfusión adecuada
+function PerfusionPressure() {
+  const win = (y, label, signo) => (
+    <g>
+      <circle cx="256" cy={y} r="5" fill={C.terra} />
+      <text x="272" y={y + 4} fill={C.ink2} fontSize="12">{label}: <tspan fill={C.terra}>{signo}</tspan></text>
+    </g>
+  )
+  return (
+    <svg viewBox="0 0 440 200" {...svgProps}>
+      {/* Presión */}
+      <text x="20" y="34" fill={C.mint} fontSize="12.5" fontWeight="600">Presión (PAM)</text>
+      <rect x="20" y="52" width="180" height="18" rx="9" fill={C.surface} stroke={C.grid} strokeWidth="1.5" />
+      <rect x="20" y="52" width="126" height="18" rx="9" fill={C.mint} opacity="0.3" />
+      <line x1="146" y1="46" x2="146" y2="76" stroke={C.mint} strokeWidth="2" />
+      <text x="20" y="92" fill={C.ink3} fontSize="11">70 mmHg · aparentemente normal</text>
+      <line x1="220" y1="20" x2="220" y2="180" stroke={C.grid} strokeWidth="1" strokeDasharray="4 4" />
+      {/* Perfusión */}
+      <text x="240" y="34" fill={C.terra} fontSize="12.5" fontWeight="600">Perfusión</text>
+      {win(58, 'Piel', 'moteado')}
+      {win(84, 'Riñón', 'oliguria')}
+      {win(110, 'Cerebro', 'confusión')}
+      {win(136, 'Lactato', '↑')}
+      <text x="220" y="192" fill={C.ink4} fontSize="10.5" textAnchor="middle">PAM normal ≠ perfusión adecuada · trata la perfusión</text>
+    </svg>
+  )
+}
+
+// — VTI / LVOT: volumen sistólico
+function VtiLvot() {
+  return (
+    <svg viewBox="0 0 440 220" {...svgProps}>
+      {/* LVOT circle */}
+      <text x="30" y="30" fill={C.steel} fontSize="12.5" fontWeight="600">LVOT (TSVI)</text>
+      <circle cx="90" cy="110" r="46" fill={C.surface} stroke={C.steel} strokeWidth="1.8" />
+      <line x1="44" y1="110" x2="136" y2="110" stroke={C.steel} strokeWidth="1.5" strokeDasharray="4 3" markerStart="url(#va)" markerEnd="url(#va)" />
+      <text x="90" y="100" fill={C.ink2} fontSize="12" textAnchor="middle">D</text>
+      <text x="90" y="180" fill={C.ink4} fontSize="10.5" textAnchor="middle">Área = π (D/2)²</text>
+      {/* VTI envelope */}
+      <text x="250" y="30" fill={C.pearl} fontSize="12.5" fontWeight="600">Doppler · VTI</text>
+      <line x1="230" y1="150" x2="410" y2="150" stroke={C.grid} strokeWidth="1.5" />
+      <path d="M240 150 L268 70 L296 150 Z" fill={C.pearl} opacity="0.18" stroke={C.pearl} strokeWidth="2" />
+      <path d="M300 150 L328 70 L356 150 Z" fill={C.pearl} opacity="0.18" stroke={C.pearl} strokeWidth="2" />
+      <text x="290" y="180" fill={C.ink4} fontSize="10.5" textAnchor="middle">VTI (integral velocidad-tiempo)</text>
+      <text x="220" y="206" fill={C.mint} fontSize="11.5" textAnchor="middle" fontWeight="600">VS = π (D/2)² × VTI</text>
+      <defs>
+        <marker id="va" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+          <path d="M8 4l-4-4 0 8z" fill={C.steel} />
+        </marker>
+      </defs>
+    </svg>
+  )
+}
+
+// — Interpretación de la VCI
+function VciDiagram() {
+  const tube = (ox, tone, w, tit, nota) => (
+    <g transform={`translate(${ox},0)`}>
+      <rect x={50 - w / 2} y="40" width={w} height="110" rx={w / 2} fill={tone} opacity="0.2" stroke={tone} strokeWidth="1.8" />
+      <path d="M14 70 h14" stroke={C.ink4} strokeWidth="1.5" markerEnd="url(#ia)" />
+      <path d="M86 70 h-14" stroke={C.ink4} strokeWidth="1.5" markerEnd="url(#ia)" />
+      <text x="50" y="172" fill={tone} fontSize="12" fontWeight="600" textAnchor="middle">{tit}</text>
+      <text x="50" y="190" fill={C.ink3} fontSize="10" textAnchor="middle">{nota}</text>
+    </g>
+  )
+  return (
+    <svg viewBox="0 0 440 210" {...svgProps}>
+      <defs>
+        <marker id="ia" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+          <path d="M0 0l6 4-6 4z" fill={C.ink4} />
+        </marker>
+      </defs>
+      {tube(40, C.steel, 26, 'Pequeña · colapsable', 'baja presión · respondedor probable')}
+      {tube(250, C.terra, 60, 'Dilatada · sin colapso', 'presión alta · congestión')}
+    </svg>
+  )
+}
+
+// — VExUS (congestión venosa sistémica)
+function Vexus() {
+  const row = (y, label, sev, tone) => (
+    <g>
+      <text x="30" y={y + 4} fill={C.ink2} fontSize="11.5">{label}</text>
+      <rect x="200" y={y - 11} width="120" height="18" rx="9" fill={tone} opacity="0.18" stroke={tone} strokeWidth="1" />
+      <text x="260" y={y + 3} fill={tone} fontSize="10.5" textAnchor="middle" fontWeight="600">{sev}</text>
+    </g>
+  )
+  return (
+    <svg viewBox="0 0 440 230" {...svgProps}>
+      <text x="30" y="28" fill={C.steel} fontSize="13" fontWeight="600">VExUS · congestión venosa</text>
+      {/* Gate VCI */}
+      <rect x="30" y="42" width="290" height="26" rx="8" fill={C.surface} stroke={C.grid} strokeWidth="1.5" />
+      <text x="44" y="59" fill={C.ink2} fontSize="11.5">VCI ≥ 2 cm (dilatada) → evaluar venas</text>
+      {row(96, 'Vena suprahepática', 'S/D invertida', C.terra)}
+      {row(126, 'Vena porta', 'pulsatilidad >50%', C.pearl)}
+      {row(156, 'Vena renal (intrarrenal)', 'patrón bifásico', C.terra)}
+      {/* Escala de grado */}
+      <text x="30" y="192" fill={C.ink3} fontSize="11">Grado</text>
+      {['0', '1', '2', '3'].map((g, i) => (
+        <g key={i}>
+          <rect x={80 + i * 60} y="180" width="46" height="20" rx="6" fill={[C.mint, C.pearl, C.terra, C.terra][i]} opacity="0.2" stroke={[C.mint, C.pearl, C.terra, C.terra][i]} strokeWidth="1" />
+          <text x={103 + i * 60} y="194" fill={[C.mint, C.pearl, C.terra, C.terra][i]} fontSize="11" textAnchor="middle" fontWeight="600">{g}</text>
+        </g>
+      ))}
+      <text x="30" y="222" fill={C.ink4} fontSize="10.5">Mayor grado → más congestión → riesgo de LRA</text>
+    </svg>
+  )
+}
+
 export const DIAGRAMS = {
   'monro-kellie': MonroKellie,
   'icp-waveform': IcpWaveform,
@@ -495,6 +604,10 @@ export const DIAGRAMS = {
   'mechanical-power': MechanicalPower,
   'cuff-leak': CuffLeak,
   'diaphragm-us': DiaphragmUs,
+  'perfusion-pressure': PerfusionPressure,
+  'vti-lvot': VtiLvot,
+  vci: VciDiagram,
+  vexus: Vexus,
 }
 
 export default DIAGRAMS

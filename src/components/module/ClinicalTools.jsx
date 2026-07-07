@@ -620,6 +620,184 @@ function HighRiskExtubCalculator() {
   )
 }
 
+function LactateClearanceCalculator() {
+  const [ini, setIni] = useState('')
+  const [act, setAct] = useState('')
+  const a = parseFloat(ini)
+  const b = parseFloat(act)
+  const ok = !isNaN(a) && !isNaN(b) && a > 0
+  const cl = ok ? Math.round(((a - b) / a) * 100) : null
+  let tone = 'idle'
+  let txt = 'Introduce lactato inicial y actual'
+  if (ok) {
+    if (cl >= 20) {
+      tone = 'mint'
+      txt = 'Buen aclaramiento (≥20%)'
+    } else if (cl >= 10) {
+      tone = 'pearl'
+      txt = 'Aclaramiento límite (10–20%)'
+    } else {
+      tone = 'terra'
+      txt = 'Sin aclaramiento (<10%): reevaluar'
+    }
+  }
+  return (
+    <div className="grid gap-3">
+      <div className="grid grid-cols-2 gap-3">
+        <Field label="Lactato inicial" unit="mmol/L" value={ini} onChange={setIni} />
+        <Field label="Lactato actual" unit="mmol/L" value={act} onChange={setAct} />
+      </div>
+      <Result value={cl} unit="%" tone={tone} interpretacion={txt} />
+      <p className="text-[11px] text-ink-400">Aclaramiento = (inicial − actual)/inicial · meta ≥10–20% a 2 h.</p>
+    </div>
+  )
+}
+
+function Scvo2Calculator() {
+  const [v, setV] = useState('')
+  const x = parseFloat(v)
+  const ok = !isNaN(x)
+  let tone = 'idle'
+  let txt = 'Introduce la ScvO₂'
+  if (ok) {
+    if (x < 65) {
+      tone = 'terra'
+      txt = 'Baja (<65%): DO₂ insuficiente / extracción alta'
+    } else if (x <= 75) {
+      tone = 'mint'
+      txt = 'Normal (65–75%)'
+    } else {
+      tone = 'pearl'
+      txt = 'Alta (>75%): baja extracción (distributivo/citopático)'
+    }
+  }
+  return (
+    <div className="grid gap-3">
+      <Field label="ScvO₂" unit="%" value={v} onChange={setV} />
+      <Result value={ok ? x : null} unit="%" tone={tone} interpretacion={txt} />
+      <p className="text-[11px] text-ink-400">Normal 65–75% · interpretar con lactato y GC, no aislada.</p>
+    </div>
+  )
+}
+
+function Cao2Calculator() {
+  const [hb, setHb] = useState('')
+  const [sao2, setSao2] = useState('')
+  const [pao2, setPao2] = useState('')
+  const h = parseFloat(hb)
+  const s = parseFloat(sao2)
+  const p = parseFloat(pao2)
+  const ok = !isNaN(h) && !isNaN(s)
+  const cao2 = ok ? +(1.34 * h * (s / 100) + 0.003 * (isNaN(p) ? 0 : p)).toFixed(1) : null
+  return (
+    <div className="grid gap-3">
+      <div className="grid grid-cols-3 gap-3">
+        <Field label="Hb" unit="g/dL" value={hb} onChange={setHb} />
+        <Field label="SaO₂" unit="%" value={sao2} onChange={setSao2} />
+        <Field label="PaO₂" unit="mmHg" value={pao2} onChange={setPao2} />
+      </div>
+      <Result value={cao2} unit="mL/dL" tone={ok ? 'steel' : 'idle'} interpretacion={ok ? 'Contenido arterial de O₂' : 'Introduce Hb y SaO₂'} />
+      <p className="text-[11px] text-ink-400">CaO₂ = 1,34·Hb·SaO₂ + 0,003·PaO₂ · la Hb domina la DO₂.</p>
+    </div>
+  )
+}
+
+function VtiSvCalculator() {
+  const [d, setD] = useState('')
+  const [vti, setVti] = useState('')
+  const dd = parseFloat(d)
+  const t = parseFloat(vti)
+  const ok = !isNaN(dd) && !isNaN(t) && dd > 0
+  const sv = ok ? Math.round(Math.PI * (dd / 2) ** 2 * t) : null
+  let tone = 'idle'
+  let txt = 'Introduce D del TSVI y VTI'
+  if (ok) {
+    if (sv >= 60) {
+      tone = 'mint'
+      txt = 'Volumen sistólico normal'
+    } else {
+      tone = 'terra'
+      txt = 'Volumen sistólico bajo'
+    }
+  }
+  return (
+    <div className="grid gap-3">
+      <div className="grid grid-cols-2 gap-3">
+        <Field label="Diámetro TSVI" unit="cm" value={d} onChange={setD} />
+        <Field label="VTI" unit="cm" value={vti} onChange={setVti} />
+      </div>
+      <Result value={sv} unit="mL" tone={tone} interpretacion={txt} />
+      <p className="text-[11px] text-ink-400">VS = π·(D/2)²·VTI · normal ≈ 60–100 mL.</p>
+    </div>
+  )
+}
+
+function CardiacOutputCalculator() {
+  const [sv, setSv] = useState('')
+  const [hr, setHr] = useState('')
+  const s = parseFloat(sv)
+  const f = parseFloat(hr)
+  const ok = !isNaN(s) && !isNaN(f)
+  const co = ok ? +((s * f) / 1000).toFixed(1) : null
+  let tone = 'idle'
+  let txt = 'Introduce VS y FC'
+  if (ok) {
+    if (co >= 4) {
+      tone = 'mint'
+      txt = 'Gasto normal-alto (≥4)'
+    } else {
+      tone = 'terra'
+      txt = 'Gasto bajo (<4)'
+    }
+  }
+  return (
+    <div className="grid gap-3">
+      <div className="grid grid-cols-2 gap-3">
+        <Field label="Volumen sistólico" unit="mL" value={sv} onChange={setSv} />
+        <Field label="FC" unit="lpm" value={hr} onChange={setHr} />
+      </div>
+      <Result value={co} unit="L/min" tone={tone} interpretacion={txt} />
+      <p className="text-[11px] text-ink-400">GC = VS × FC · normal ≈ 4–8 L/min.</p>
+    </div>
+  )
+}
+
+function SvrCalculator() {
+  const [map, setMap] = useState('')
+  const [cvp, setCvp] = useState('')
+  const [co, setCo] = useState('')
+  const m = parseFloat(map)
+  const v = parseFloat(cvp)
+  const c = parseFloat(co)
+  const ok = !isNaN(m) && !isNaN(v) && !isNaN(c) && c > 0
+  const svr = ok ? Math.round(((m - v) / c) * 80) : null
+  let tone = 'idle'
+  let txt = 'Introduce PAM, PVC y GC'
+  if (ok) {
+    if (svr < 800) {
+      tone = 'terra'
+      txt = 'Baja (<800): vasodilatación (distributivo)'
+    } else if (svr <= 1200) {
+      tone = 'mint'
+      txt = 'Normal (800–1200)'
+    } else {
+      tone = 'pearl'
+      txt = 'Alta (>1200): vasoconstricción'
+    }
+  }
+  return (
+    <div className="grid gap-3">
+      <div className="grid grid-cols-3 gap-3">
+        <Field label="PAM" unit="mmHg" value={map} onChange={setMap} />
+        <Field label="PVC" unit="mmHg" value={cvp} onChange={setCvp} />
+        <Field label="GC" unit="L/min" value={co} onChange={setCo} />
+      </div>
+      <Result value={svr} unit="dyn·s·cm⁻⁵" tone={tone} interpretacion={txt} />
+      <p className="text-[11px] text-ink-400">RVS = (PAM − PVC)/GC × 80 · normal 800–1200.</p>
+    </div>
+  )
+}
+
 const CALCS = {
   ppc: CppCalculator,
   lindegaard: LindegaardCalculator,
@@ -638,6 +816,12 @@ const CALCS = {
   p01: P01Calculator,
   cuffleak: CuffLeakCalculator,
   highriskextub: HighRiskExtubCalculator,
+  lactateclearance: LactateClearanceCalculator,
+  scvo2: Scvo2Calculator,
+  cao2: Cao2Calculator,
+  vtisv: VtiSvCalculator,
+  cardiacoutput: CardiacOutputCalculator,
+  svr: SvrCalculator,
 }
 
 function ToolCard({ icon, titulo, children }) {
