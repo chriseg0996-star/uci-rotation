@@ -1,11 +1,11 @@
 import { NavLink } from 'react-router-dom'
 import Icon from './Icon.jsx'
-import { NAV, ROTATION, MODULES } from '../data/modules.js'
-import { useCompletion } from '../hooks/useCompletion.js'
+import { NAV, ROTATION } from '../data/modules.js'
+import { DIAS } from '../data/dias.js'
 
 export default function Sidebar({ open = false, onClose = () => {} }) {
-  const { count } = useCompletion()
-  const totalModulos = MODULES.length
+  const totalModulos = DIAS.length
+  const count = DIAS.filter((d) => !d.pendiente).length
   const pct = totalModulos ? Math.round((count / totalModulos) * 100) : 0
 
   return (
@@ -99,7 +99,7 @@ export default function Sidebar({ open = false, onClose = () => {} }) {
           <div className="rounded-xl border border-slate-700/60 bg-slate-800/60 p-3.5">
             <div className="flex items-center justify-between">
               <p className="text-[10.5px] font-semibold uppercase tracking-[0.14em] text-ink-400">
-                Progreso del currículo
+                Módulos con contenido
               </p>
               <span className="font-mono text-[11px] tabular text-steel-300">
                 {count}/{totalModulos}

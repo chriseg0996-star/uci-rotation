@@ -2,27 +2,25 @@ import PageHeader from '../components/PageHeader.jsx'
 import StatCard from '../components/StatCard.jsx'
 import ModuleCard from '../components/ModuleCard.jsx'
 import { DIAS } from '../data/dias.js'
-import { useCompletion } from '../hooks/useCompletion.js'
 
 export default function Temario() {
-  const { isComplete, count } = useCompletion()
-  const pct = DIAS.length ? Math.round((count / DIAS.length) * 100) : 0
+  const conContenido = DIAS.filter((d) => !d.pendiente).length
 
   return (
     <div>
       <PageHeader
         kicker="Currículo clínico"
         title="Módulos clínicos"
-        description="8 módulos temáticos de UCI. Completa antes el Inicio de la Rotación. Cada módulo abre su propia página con introducción, lecciones nucleares, perlas clínicas, errores frecuentes, habilidades, caso interactivo, autoevaluación y referencias."
+        description="Referencia de UCI por temas. Cada módulo abre como una app de bolsillo: overview de una pantalla, quick cards, figuras y algoritmos, high-yield, pitfalls, evidencia, herramientas y un caso interactivo."
         right={
           <div className="hidden w-48 sm:block">
             <StatCard
-              label="Módulos completados"
-              value={count}
+              label="Con contenido"
+              value={conContenido}
               sub={`/${DIAS.length}`}
-              icon={count >= DIAS.length ? 'badge' : 'layers'}
-              tone={count >= DIAS.length ? 'mint' : 'steel'}
-              hint={`${pct}% del currículo`}
+              icon="layers"
+              tone="steel"
+              hint="módulos disponibles"
             />
           </div>
         }
@@ -35,10 +33,8 @@ export default function Temario() {
             to={`/temario/${d.dia}`}
             dia={d.dia}
             titulo={d.titulo}
-            done={isComplete(d.dia)}
+            subtitulo={d.subtitulo}
             pendiente={d.pendiente}
-            tiempoEstimado={d.tiempoEstimado}
-            objetivosCount={d.objetivos.length}
           />
         ))}
       </div>

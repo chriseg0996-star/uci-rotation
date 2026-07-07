@@ -1,18 +1,76 @@
-import { useParams, Link, useNavigate } from 'react-router-dom'
+import { useEffect, useRef } from 'react'
+import { useParams, Link, useSearchParams } from 'react-router-dom'
 import { getDia, DIAS } from '../data/dias.js'
-import { useCompletion } from '../hooks/useCompletion.js'
 import Icon from '../components/Icon.jsx'
 import Button from '../components/Button.jsx'
 import EmptyState from '../components/EmptyState.jsx'
-import DayHeader from '../components/dia/DayHeader.jsx'
-import CompleteButton from '../components/dia/CompleteButton.jsx'
-import ModuleContent from '../components/learn/ModuleContent.jsx'
+import ModuleHero from '../components/module/ModuleHero.jsx'
+import ModuleTabs from '../components/module/ModuleTabs.jsx'
+import SectionEmpty from '../components/module/SectionEmpty.jsx'
+import Overview from '../components/module/Overview.jsx'
+import QuickCards from '../components/module/QuickCards.jsx'
+import HighYield from '../components/module/HighYield.jsx'
+import Pitfalls from '../components/module/Pitfalls.jsx'
+import Evidence from '../components/module/Evidence.jsx'
+import ClinicalTools from '../components/module/ClinicalTools.jsx'
+import FurtherReading from '../components/module/FurtherReading.jsx'
+import FigureGallery from '../components/figure/FigureGallery.jsx'
+import InteractiveCase from '../components/learn/InteractiveCase.jsx'
+
+const TABS = [
+  { id: 'overview', label: 'Overview', icon: 'compass' },
+  { id: 'cards', label: 'Quick Cards', icon: 'layers' },
+  { id: 'figures', label: 'Figuras', icon: 'image' },
+  { id: 'highyield', label: 'High-Yield', icon: 'gem' },
+  { id: 'pitfalls', label: 'Pitfalls', icon: 'alert' },
+  { id: 'evidence', label: 'Evidence', icon: 'book' },
+  { id: 'tools', label: 'Tools', icon: 'sliders' },
+  { id: 'case', label: 'Caso', icon: 'stethoscope' },
+  { id: 'reading', label: '+ Lecturas', icon: 'library' },
+]
+
+function Section({ active, data }) {
+  switch (active) {
+    case 'overview':
+      return data.overview ? <Overview overview={data.overview} /> : <SectionEmpty icon="compass" label="Overview" />
+    case 'cards':
+      return data.quickCards?.length ? <QuickCards cards={data.quickCards} /> : <SectionEmpty icon="layers" label="Quick Cards" />
+    case 'figures':
+      return data.figuras?.length ? <FigureGallery figuras={data.figuras} /> : <SectionEmpty icon="image" label="Figuras" />
+    case 'highyield':
+      return data.highYield?.length ? <HighYield items={data.highYield} /> : <SectionEmpty icon="gem" label="High-Yield" />
+    case 'pitfalls':
+      return data.pitfalls?.length ? <Pitfalls items={data.pitfalls} /> : <SectionEmpty icon="alert" label="Pitfalls" />
+    case 'evidence':
+      return data.evidence?.length ? <Evidence items={data.evidence} /> : <SectionEmpty icon="book" label="Evidence" />
+    case 'tools':
+      return data.tools?.length ? <ClinicalTools tools={data.tools} /> : <SectionEmpty icon="sliders" label="Clinical Tools" />
+    case 'case':
+      return data.caso ? <InteractiveCase caso={data.caso} /> : <SectionEmpty icon="stethoscope" label="Caso clínico" />
+    case 'reading':
+      return data.furtherReading?.length ? <FurtherReading items={data.furtherReading} /> : <SectionEmpty icon="library" label="Lecturas" />
+    default:
+      return null
+  }
+}
 
 export default function DiaDetail() {
   const { dia } = useParams()
-  const navigate = useNavigate()
+  const [params, setParams] = useSearchParams()
   const data = getDia(dia)
-  const { isComplete, toggle } = useCompletion()
+  const sectionRef = useRef(null)
+  const mounted = useRef(false)
+
+  const active = TABS.some((t) => t.id === params.get('s')) ? params.get('s') : 'overview'
+
+  // Al cambiar de sección, desplaza el inicio de la sección bajo las pestañas (no en el montaje).
+  useEffect(() => {
+    if (!mounted.current) {
+      mounted.current = true
+      return
+    }
+    sectionRef.current?.scrollIntoView({ block: 'start' })
+  }, [active, dia])
 
   if (!data) {
     return (
@@ -32,54 +90,41 @@ export default function DiaDetail() {
     )
   }
 
-  const completo = isComplete(data.dia)
   const prev = DIAS.find((d) => d.dia === data.dia - 1)
   const next = DIAS.find((d) => d.dia === data.dia + 1)
 
+  const meta = [
+    data.figuras?.length ? { icon: 'image', texto: `${data.figuras.length} figuras` } : null,
+    data.evidence?.length ? { icon: 'book', texto: `${data.evidence.length} referencias` } : null,
+    data.pendiente ? { icon: 'layers', texto: 'estructura base' } : null,
+  ].filter(Boolean)
+
   return (
-    <div className="space-y-9">
-      {/* Volver */}
-      <Link
-        to="/temario"
-        className="inline-flex items-center gap-1.5 text-[13px] font-medium text-ink-400 transition-colors hover:text-ink-100"
-      >
-        <Icon name="back" size={15} />
-        Módulos clínicos
-      </Link>
+    <div className="space-y-5">
+      <ModuleHero numero={data.dia} titulo={data.titulo} subtitulo={data.subtitulo} meta={meta} />
 
-      <DayHeader
-        dia={data.dia}
-        titulo={data.titulo}
-        tiempoEstimado={data.tiempoEstimado}
-        completo={completo}
-      />
+      <ModuleTabs tabs={TABS} active={active} onChange={(id) => setParams({ s: id }, { replace: true })} />
 
-      {/* Cuerpo del motor educativo */}
-      <ModuleContent data={data} contentId={data.dia} />
+      <div ref={sectionRef} className="scroll-mt-16 pt-1">
+        <Section active={active} data={data} />
+      </div>
 
-      {/* Acción + navegación entre módulos */}
-      <div className="flex flex-col gap-4 border-t border-slate-700/50 pt-6 sm:flex-row sm:items-center sm:justify-between">
-        <CompleteButton completo={completo} onToggle={() => toggle(data.dia)} />
-        <div className="flex items-center gap-2">
-          <Button
-            variant="secondary"
-            size="sm"
-            disabled={!prev}
-            onClick={() => prev && navigate(`/temario/${prev.dia}`)}
-            icon="back"
-          >
-            Módulo {data.dia - 1}
+      {/* Navegación entre módulos */}
+      <div className="flex items-center justify-between gap-2 border-t border-slate-700/50 pt-6">
+        {prev ? (
+          <Button as={Link} to={`/temario/${prev.dia}`} variant="secondary" size="sm" icon="back">
+            {prev.titulo}
           </Button>
-          <Button
-            variant="secondary"
-            size="sm"
-            disabled={!next}
-            onClick={() => next && navigate(`/temario/${next.dia}`)}
-            iconRight="arrow"
-          >
-            Módulo {data.dia + 1}
+        ) : (
+          <span />
+        )}
+        {next ? (
+          <Button as={Link} to={`/temario/${next.dia}`} variant="secondary" size="sm" iconRight="arrow">
+            {next.titulo}
           </Button>
-        </div>
+        ) : (
+          <span />
+        )}
       </div>
     </div>
   )

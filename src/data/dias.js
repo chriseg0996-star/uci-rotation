@@ -1,40 +1,34 @@
-// Registro de módulos clínicos del currículo (motor educativo).
-// Todos los módulos (1–8) parten como esqueletos estructurados desde MODULES, listos para
-// poblarse con el esquema completo. Los fundamentos de cuidados críticos viven ahora en el
-// onboarding (../data/onboarding.js), no en el Módulo 1.
+// Registro de módulos clínicos (referencia de bolsillo de UCI).
+// Cada módulo usa el esquema de secciones del nuevo motor. El Módulo 1 (Neuromonitoreo) es la
+// implementación de referencia; los Módulos 2–8 adoptan la misma estructura vacía (pendiente).
 //
-// Esquema por módulo (todos los campos salvo dia/titulo son opcionales):
-//   { dia, titulo, tiempoEstimado, intro, objetivos, lecciones,
-//     pearls, errores, skills, caso, quiz, referencias, quickReview, pendiente }
+// Esquema por módulo:
+//   { dia, slug, titulo, subtitulo, overview, quickCards, figuras, highYield, pitfalls,
+//     evidence, tools, caso, furtherReading, pendiente }
 import { MODULES } from './modules.js'
 import neuromonitoreo from './modules/neuromonitoreo.js'
 
-// Módulos con contenido completo. El resto (2–8) parten como esqueletos estructurados.
+// Módulos con contenido completo. El resto adopta el esqueleto de secciones.
 const DETAILED = {
   1: neuromonitoreo,
 }
 
-// Convierte un módulo base (MODULES) en un esqueleto con el nuevo esquema.
+// Convierte un módulo base (MODULES) en un esqueleto con el esquema de secciones.
 function buildSkeleton(m) {
   return {
     dia: m.dia,
+    slug: `modulo-${m.dia}`,
     titulo: m.titulo,
-    tiempoEstimado: '—',
-    intro: null,
-    objetivos: [m.objetivo],
-    lecciones: m.temas.map((t, i) => ({
-      id: `tema-${i}`,
-      titulo: t,
-      intro: '',
-      bloques: [],
-    })),
-    pearls: [],
-    errores: [],
-    skills: [],
+    subtitulo: m.objetivo,
+    overview: null,
+    quickCards: [],
+    figuras: [],
+    highYield: [],
+    pitfalls: [],
+    evidence: [],
+    tools: [],
     caso: null,
-    quiz: [],
-    referencias: [],
-    quickReview: [],
+    furtherReading: [],
     pendiente: true,
   }
 }

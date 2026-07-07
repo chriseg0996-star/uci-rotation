@@ -31,6 +31,14 @@ const PATHS = {
   layers: 'M12 3 3 8l9 5 9-5-9-5zM3 13l9 5 9-5M3 17l9 5 9-5',
   compass: 'M12 21a9 9 0 1 1 0-18 9 9 0 0 1 0 18zM15.5 8.5 13 13l-4.5 2.5L11 11z',
   flame: 'M12 3c1.5 3 4 4.5 4 8a4 4 0 0 1-8 0c0-1 .3-1.8.8-2.5C9.8 9.7 11 8.5 12 3z',
+  image: 'M3 5h18v14H3zM3 16l5-5 4 4 3-3 6 6M8.5 9.5a1.5 1.5 0 1 1 0-.01',
+  expand: 'M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M8 21H5a2 2 0 0 1-2-2v-3M16 21h3a2 2 0 0 0 2-2v-3',
+  external: 'M14 4h6v6M20 4l-9 9M18 13v5a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h5',
+  sliders: 'M4 6h9M17 6h3M4 12h3M11 12h9M4 18h13M21 18h-1M13 4v4M7 10v4M17 16v4',
+  brain:
+    'M9 4a3 3 0 0 0-3 3 3 3 0 0 0-1 5.5A3 3 0 0 0 6 18a3 3 0 0 0 3 2V4zM15 4a3 3 0 0 1 3 3 3 3 0 0 1 1 5.5A3 3 0 0 1 18 18a3 3 0 0 1-3 2V4z',
+  waveform: 'M2 12h3l2-7 3 14 2-9 2 5 2-3h6',
+  zoomIn: 'M11 19a8 8 0 1 1 0-16 8 8 0 0 1 0 16zM21 21l-4.3-4.3M11 8v6M8 11h6',
 }
 
 export default function Icon({ name, className = '', size = 18, strokeWidth = 1.75 }) {

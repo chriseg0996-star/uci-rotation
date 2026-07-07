@@ -2,35 +2,21 @@ import { Link } from 'react-router-dom'
 import Icon from './Icon.jsx'
 import Badge from './Badge.jsx'
 
-// Tarjeta de módulo diario reutilizable.
-//   variant="card"  → tarjeta completa con metadatos (rejilla del Temario)
+// Tarjeta de módulo clínico reutilizable (sin seguimiento de completado).
+//   variant="card"  → tarjeta completa (rejilla de Módulos clínicos)
 //   variant="row"   → fila compacta (lista del Dashboard)
-export default function ModuleCard({
-  to,
-  dia,
-  titulo,
-  objetivo,
-  done = false,
-  today = false,
-  pendiente = false,
-  tiempoEstimado,
-  objetivosCount,
-  variant = 'card',
-}) {
-  // — Sello numérico / de estado del día
+export default function ModuleCard({ to, dia, titulo, subtitulo, pendiente = false, variant = 'card' }) {
   const seal = (
     <div
       className={[
         'grid shrink-0 place-items-center rounded-xl font-mono font-semibold tabular transition-colors',
         variant === 'card' ? 'h-11 w-11 text-lg' : 'h-9 w-9 text-sm',
-        done
-          ? 'bg-mint-soft text-mint-300 ring-1 ring-mint-400/30'
-          : today
-            ? 'bg-steel-400 text-slate-900 shadow-[0_6px_18px_-8px_rgba(143,167,196,0.6)]'
-            : 'bg-slate-900 text-ink-300 ring-1 ring-slate-700 group-hover:ring-slate-600',
+        pendiente
+          ? 'bg-slate-900 text-ink-300 ring-1 ring-slate-700 group-hover:ring-slate-600'
+          : 'bg-steel-400 text-slate-900 shadow-[0_6px_18px_-8px_rgba(143,167,196,0.6)]',
       ].join(' ')}
     >
-      {done ? <Icon name="badge" size={variant === 'card' ? 20 : 17} /> : dia}
+      {dia}
     </div>
   )
 
@@ -47,11 +33,13 @@ export default function ModuleCard({
             <span className="mx-1.5 text-slate-600">·</span>
             {titulo}
           </p>
-          {objetivo && <p className="mt-0.5 truncate text-xs leading-relaxed text-ink-400">{objetivo}</p>}
+          {subtitulo && (
+            <p className="mt-0.5 truncate text-xs leading-relaxed text-ink-400">{subtitulo}</p>
+          )}
         </div>
-        {today && (
+        {!pendiente && (
           <Badge tone="steel" dot className="shrink-0">
-            Actual
+            Completo
           </Badge>
         )}
         <Icon
@@ -73,15 +61,23 @@ export default function ModuleCard({
               <p className="text-[10.5px] font-semibold uppercase tracking-[0.16em] text-ink-400">
                 Módulo {dia}
               </p>
-              {pendiente && (
-                <span className="rounded-full bg-slate-900 px-1.5 py-0.5 text-[9.5px] font-semibold uppercase tracking-wide text-ink-400 ring-1 ring-slate-700">
-                  esquema
-                </span>
-              )}
+              <span
+                className={[
+                  'rounded-full px-1.5 py-0.5 text-[9.5px] font-semibold uppercase tracking-wide ring-1',
+                  pendiente
+                    ? 'bg-slate-900 text-ink-400 ring-slate-700'
+                    : 'bg-steel-soft text-steel-300 ring-steel-400/25',
+                ].join(' ')}
+              >
+                {pendiente ? 'estructura' : 'referencia'}
+              </span>
             </div>
             <h3 className="mt-1 text-[15px] font-semibold leading-snug tracking-tight text-ink-100">
               {titulo}
             </h3>
+            {subtitulo && (
+              <p className="mt-1.5 text-[12.5px] leading-relaxed text-ink-400">{subtitulo}</p>
+            )}
           </div>
           <Icon
             name="arrow"
@@ -89,29 +85,6 @@ export default function ModuleCard({
             className="mt-1 shrink-0 text-slate-600 transition-all duration-200 group-hover:translate-x-0.5 group-hover:text-steel-300"
           />
         </div>
-
-        {(tiempoEstimado || objetivosCount != null) && (
-          <div className="mt-4 flex items-center gap-4 border-t border-slate-700/50 pt-3.5 text-[11.5px] text-ink-400">
-            {tiempoEstimado && (
-              <span className="inline-flex items-center gap-1.5">
-                <Icon name="clock" size={13} className="text-slate-500" />
-                {tiempoEstimado}
-              </span>
-            )}
-            {objetivosCount != null && (
-              <span className="inline-flex items-center gap-1.5">
-                <Icon name="target" size={13} className="text-slate-500" />
-                {objetivosCount} objetivos
-              </span>
-            )}
-            {done && (
-              <span className="ml-auto inline-flex items-center gap-1.5 font-medium text-mint-300">
-                <Icon name="check" size={13} />
-                Completado
-              </span>
-            )}
-          </div>
-        )}
       </div>
     </Link>
   )
