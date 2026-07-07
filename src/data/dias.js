@@ -7,10 +7,12 @@
 //   { dia, titulo, tiempoEstimado, intro, objetivos, lecciones,
 //     pearls, errores, skills, caso, quiz, referencias, quickReview, pendiente }
 import { MODULES } from './modules.js'
+import neuromonitoreo from './modules/neuromonitoreo.js'
 
-// Módulos con contenido completo. Vacío por ahora: el Módulo 1 (Neuromonitoreo) quedó
-// como esqueleto estructurado, listo para recibir su contenido real.
-const DETAILED = {}
+// Módulos con contenido completo. El resto (2–8) parten como esqueletos estructurados.
+const DETAILED = {
+  1: neuromonitoreo,
+}
 
 // Convierte un módulo base (MODULES) en un esqueleto con el nuevo esquema.
 function buildSkeleton(m) {
