@@ -587,6 +587,55 @@ function Vexus() {
   )
 }
 
+// — Brecha aniónica corregida por albúmina
+function AgAlbumin() {
+  return (
+    <svg viewBox="0 0 440 190" {...svgProps}>
+      <text x="30" y="30" fill={C.steel} fontSize="12.5" fontWeight="600">Brecha aniónica corregida</text>
+      {/* Barra AG medido */}
+      <rect x="40" y="56" width="150" height="30" rx="6" fill={C.steel} opacity="0.28" stroke={C.steel} strokeWidth="1.5" />
+      <text x="115" y="76" fill={C.ink2} fontSize="12" textAnchor="middle">AG medido</text>
+      {/* Segmento oculto por albúmina baja */}
+      <rect x="190" y="56" width="86" height="30" rx="6" fill={C.terra} opacity="0.24" stroke={C.terra} strokeWidth="1.5" strokeDasharray="4 3" />
+      <text x="233" y="72" fill={C.terra} fontSize="10.5" textAnchor="middle">oculto por</text>
+      <text x="233" y="84" fill={C.terra} fontSize="10.5" textAnchor="middle">albúmina baja</text>
+      {/* Llave AG corregido */}
+      <line x1="40" y1="98" x2="276" y2="98" stroke={C.mint} strokeWidth="1.5" />
+      <text x="158" y="116" fill={C.mint} fontSize="11.5" textAnchor="middle" fontWeight="600">AG corregido</text>
+      <text x="40" y="150" fill={C.ink3} fontSize="11">AG corregido = AG + 2,5 × (4 − albúmina)</text>
+      <text x="40" y="170" fill={C.ink4} fontSize="10.5">Una albúmina baja enmascara una brecha elevada</text>
+    </svg>
+  )
+}
+
+// — Delta-delta (ΔAG / ΔHCO₃)
+function DeltaRatio() {
+  const zones = [
+    { x0: 40, x1: 130, tone: C.terra, lab: 'sin brecha /', lab2: 'hiperclorémica' },
+    { x0: 130, x1: 220, tone: C.pearl, lab: 'mixta', lab2: '(con y sin)' },
+    { x0: 220, x1: 330, tone: C.mint, lab: 'HAGMA', lab2: 'pura' },
+    { x0: 330, x1: 410, tone: C.steel, lab: '+ alcalosis met.', lab2: 'o ac. resp crón.' },
+  ]
+  return (
+    <svg viewBox="0 0 440 170" {...svgProps}>
+      <text x="30" y="28" fill={C.ink2} fontSize="12.5" fontWeight="600">Delta-delta (ΔAG / ΔHCO₃)</text>
+      {zones.map((z, i) => (
+        <g key={i}>
+          <rect x={z.x0} y="50" width={z.x1 - z.x0 - 3} height="22" fill={z.tone} opacity="0.2" stroke={z.tone} strokeWidth="1" />
+          <text x={(z.x0 + z.x1) / 2} y="94" fill={z.tone} fontSize="10" textAnchor="middle" fontWeight="600">{z.lab}</text>
+          <text x={(z.x0 + z.x1) / 2} y="106" fill={C.ink3} fontSize="9.5" textAnchor="middle">{z.lab2}</text>
+        </g>
+      ))}
+      {/* Escala */}
+      <line x1="40" y1="82" x2="410" y2="82" stroke={C.grid} strokeWidth="1" />
+      {[['0,4', 130], ['1', 220], ['2', 330]].map(([t, x], i) => (
+        <text key={i} x={x} y="76" fill={C.ink4} fontSize="9.5" textAnchor="middle">{t}</text>
+      ))}
+      <text x="225" y="150" fill={C.ink4} fontSize="10.5" textAnchor="middle">= (AG − 12) / (24 − HCO₃)</text>
+    </svg>
+  )
+}
+
 export const DIAGRAMS = {
   'monro-kellie': MonroKellie,
   'icp-waveform': IcpWaveform,
@@ -608,6 +657,8 @@ export const DIAGRAMS = {
   'vti-lvot': VtiLvot,
   vci: VciDiagram,
   vexus: Vexus,
+  'ag-albumin': AgAlbumin,
+  'delta-ratio': DeltaRatio,
 }
 
 export default DIAGRAMS

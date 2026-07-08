@@ -798,6 +798,290 @@ function SvrCalculator() {
   )
 }
 
+function AnionGapCalculator() {
+  const [na, setNa] = useState('')
+  const [cl, setCl] = useState('')
+  const [hco3, setHco3] = useState('')
+  const n = parseFloat(na)
+  const c = parseFloat(cl)
+  const h = parseFloat(hco3)
+  const ok = !isNaN(n) && !isNaN(c) && !isNaN(h)
+  const ag = ok ? Math.round(n - (c + h)) : null
+  let tone = 'idle'
+  let txt = 'Introduce Na, Cl y HCO₃'
+  if (ok) {
+    if (ag > 12) {
+      tone = 'terra'
+      txt = 'Brecha elevada (>12)'
+    } else {
+      tone = 'mint'
+      txt = 'Brecha normal (8–12)'
+    }
+  }
+  return (
+    <div className="grid gap-3">
+      <div className="grid grid-cols-3 gap-3">
+        <Field label="Na⁺" unit="mmol/L" value={na} onChange={setNa} />
+        <Field label="Cl⁻" unit="mmol/L" value={cl} onChange={setCl} />
+        <Field label="HCO₃⁻" unit="mmol/L" value={hco3} onChange={setHco3} />
+      </div>
+      <Result value={ag} unit="mmol/L" tone={tone} interpretacion={txt} />
+      <p className="text-[11px] text-ink-400">AG = Na − (Cl + HCO₃) · normal 8–12 · corrige por albúmina.</p>
+    </div>
+  )
+}
+
+function CorrectedAgCalculator() {
+  const [ag, setAg] = useState('')
+  const [alb, setAlb] = useState('')
+  const a = parseFloat(ag)
+  const b = parseFloat(alb)
+  const ok = !isNaN(a) && !isNaN(b)
+  const corr = ok ? +(a + 2.5 * (4 - b)).toFixed(1) : null
+  let tone = 'idle'
+  let txt = 'Introduce AG y albúmina'
+  if (ok) {
+    if (corr > 12) {
+      tone = 'terra'
+      txt = 'Brecha corregida elevada (>12)'
+    } else {
+      tone = 'mint'
+      txt = 'Brecha corregida normal'
+    }
+  }
+  return (
+    <div className="grid gap-3">
+      <div className="grid grid-cols-2 gap-3">
+        <Field label="AG medido" unit="mmol/L" value={ag} onChange={setAg} />
+        <Field label="Albúmina" unit="g/dL" value={alb} onChange={setAlb} />
+      </div>
+      <Result value={corr} unit="mmol/L" tone={tone} interpretacion={txt} />
+      <p className="text-[11px] text-ink-400">AG corregido = AG + 2,5 × (4 − albúmina).</p>
+    </div>
+  )
+}
+
+function DeltaRatioCalculator() {
+  const [ag, setAg] = useState('')
+  const [hco3, setHco3] = useState('')
+  const a = parseFloat(ag)
+  const h = parseFloat(hco3)
+  const ok = !isNaN(a) && !isNaN(h) && 24 - h !== 0
+  const dr = ok ? +((a - 12) / (24 - h)).toFixed(2) : null
+  let tone = 'idle'
+  let txt = 'Introduce AG y HCO₃'
+  if (ok) {
+    if (dr < 0.4) {
+      tone = 'terra'
+      txt = '<0,4: acidosis sin brecha añadida'
+    } else if (dr < 1) {
+      tone = 'pearl'
+      txt = '0,4–1: mixta (con y sin brecha)'
+    } else if (dr <= 2) {
+      tone = 'mint'
+      txt = '1–2: acidosis con brecha pura'
+    } else {
+      tone = 'steel'
+      txt = '>2: + alcalosis metab. o ac. resp. crónica'
+    }
+  }
+  return (
+    <div className="grid gap-3">
+      <div className="grid grid-cols-2 gap-3">
+        <Field label="AG" unit="mmol/L" value={ag} onChange={setAg} />
+        <Field label="HCO₃⁻" unit="mmol/L" value={hco3} onChange={setHco3} />
+      </div>
+      <Result value={dr} unit="" tone={tone} interpretacion={txt} />
+      <p className="text-[11px] text-ink-400">Δ-Δ = (AG − 12) / (24 − HCO₃).</p>
+    </div>
+  )
+}
+
+function WinterCalculator() {
+  const [hco3, setHco3] = useState('')
+  const [paco2, setPaco2] = useState('')
+  const h = parseFloat(hco3)
+  const p = parseFloat(paco2)
+  const ok = !isNaN(h)
+  const exp = ok ? Math.round(1.5 * h + 8) : null
+  let tone = 'idle'
+  let txt = 'Introduce HCO₃'
+  if (ok) {
+    tone = 'steel'
+    txt = `Esperada ${exp - 2}–${exp + 2} mmHg`
+    if (!isNaN(p)) {
+      if (p > exp + 2) {
+        tone = 'terra'
+        txt = `Medida ${p} > esperada: acidosis respiratoria añadida`
+      } else if (p < exp - 2) {
+        tone = 'pearl'
+        txt = `Medida ${p} < esperada: alcalosis respiratoria añadida`
+      } else {
+        tone = 'mint'
+        txt = 'Compensación adecuada'
+      }
+    }
+  }
+  return (
+    <div className="grid gap-3">
+      <div className="grid grid-cols-2 gap-3">
+        <Field label="HCO₃⁻" unit="mmol/L" value={hco3} onChange={setHco3} />
+        <Field label="PaCO₂ medida" unit="mmHg" value={paco2} onChange={setPaco2} />
+      </div>
+      <Result value={exp} unit="mmHg" tone={tone} interpretacion={txt} />
+      <p className="text-[11px] text-ink-400">PaCO₂ esperada = 1,5·HCO₃ + 8 (±2) · acidosis metabólica.</p>
+    </div>
+  )
+}
+
+const COMP_TIPOS = [
+  { id: 'am', label: 'Ac. metab.', input: 'HCO₃⁻', out: 'PaCO₂', fn: (x) => `${Math.round(1.5 * x + 8 - 2)}–${Math.round(1.5 * x + 8 + 2)}` },
+  { id: 'alm', label: 'Alc. metab.', input: 'HCO₃⁻', out: 'PaCO₂', fn: (x) => `${Math.round(0.7 * x + 20 - 5)}–${Math.round(0.7 * x + 20 + 5)}` },
+  { id: 'ara', label: 'Ac. resp. aguda', input: 'PaCO₂', out: 'HCO₃⁻', fn: (x) => `${(24 + 1 * ((x - 40) / 10)).toFixed(0)}` },
+  { id: 'arc', label: 'Ac. resp. crónica', input: 'PaCO₂', out: 'HCO₃⁻', fn: (x) => `${(24 + 4 * ((x - 40) / 10)).toFixed(0)}` },
+  { id: 'alra', label: 'Alc. resp. aguda', input: 'PaCO₂', out: 'HCO₃⁻', fn: (x) => `${(24 - 2 * ((40 - x) / 10)).toFixed(0)}` },
+  { id: 'alrc', label: 'Alc. resp. crónica', input: 'PaCO₂', out: 'HCO₃⁻', fn: (x) => `${(24 - 5 * ((40 - x) / 10)).toFixed(0)}` },
+]
+
+function ExpectedCompensationCalculator() {
+  const [tipo, setTipo] = useState('am')
+  const [val, setVal] = useState('')
+  const t = COMP_TIPOS.find((x) => x.id === tipo)
+  const x = parseFloat(val)
+  const ok = !isNaN(x)
+  const exp = ok ? t.fn(x) : null
+  return (
+    <div className="grid gap-3">
+      <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+        {COMP_TIPOS.map((o) => (
+          <button
+            key={o.id}
+            type="button"
+            onClick={() => setTipo(o.id)}
+            aria-pressed={tipo === o.id}
+            className={[
+              'rounded-lg border px-2 py-1.5 text-[11.5px] font-medium transition-colors',
+              tipo === o.id ? 'border-steel-400/40 bg-steel-soft text-steel-300' : 'border-slate-700 bg-slate-900/50 text-ink-300 hover:border-slate-600',
+            ].join(' ')}
+          >
+            {o.label}
+          </button>
+        ))}
+      </div>
+      <Field label={t.input} unit={t.input.includes('CO₂') ? 'mmHg' : 'mmol/L'} value={val} onChange={setVal} />
+      <Result value={exp} unit={t.out.includes('CO₂') ? 'mmHg' : 'mmol/L'} tone={ok ? 'steel' : 'idle'} interpretacion={ok ? `${t.out} esperada` : 'Elige el trastorno e introduce el valor'} />
+      <p className="text-[11px] text-ink-400">La compensación nunca normaliza del todo el pH.</p>
+    </div>
+  )
+}
+
+function OsmolarityCalculator() {
+  const [na, setNa] = useState('')
+  const [glu, setGlu] = useState('')
+  const [bun, setBun] = useState('')
+  const n = parseFloat(na)
+  const g = parseFloat(glu)
+  const b = parseFloat(bun)
+  const ok = !isNaN(n) && !isNaN(g) && !isNaN(b)
+  const osm = ok ? Math.round(2 * n + g / 18 + b / 2.8) : null
+  return (
+    <div className="grid gap-3">
+      <div className="grid grid-cols-3 gap-3">
+        <Field label="Na⁺" unit="mmol/L" value={na} onChange={setNa} />
+        <Field label="Glucosa" unit="mg/dL" value={glu} onChange={setGlu} />
+        <Field label="BUN" unit="mg/dL" value={bun} onChange={setBun} />
+      </div>
+      <Result value={osm} unit="mOsm/L" tone={ok ? 'steel' : 'idle'} interpretacion={ok ? 'Osmolaridad calculada' : 'Introduce Na, glucosa y BUN'} />
+      <p className="text-[11px] text-ink-400">Osm calc = 2·Na + glucosa/18 + BUN/2,8.</p>
+    </div>
+  )
+}
+
+function OsmolarGapCalculator() {
+  const [med, setMed] = useState('')
+  const [na, setNa] = useState('')
+  const [glu, setGlu] = useState('')
+  const [bun, setBun] = useState('')
+  const m = parseFloat(med)
+  const n = parseFloat(na)
+  const g = parseFloat(glu)
+  const b = parseFloat(bun)
+  const ok = !isNaN(m) && !isNaN(n) && !isNaN(g) && !isNaN(b)
+  const gap = ok ? Math.round(m - (2 * n + g / 18 + b / 2.8)) : null
+  let tone = 'idle'
+  let txt = 'Introduce osm medida, Na, glucosa y BUN'
+  if (ok) {
+    if (gap > 10) {
+      tone = 'terra'
+      txt = 'Elevada (>10): sospecha de tóxicos'
+    } else {
+      tone = 'mint'
+      txt = 'Normal (≤10)'
+    }
+  }
+  return (
+    <div className="grid gap-3">
+      <div className="grid grid-cols-2 gap-3">
+        <Field label="Osm medida" unit="mOsm/kg" value={med} onChange={setMed} />
+        <Field label="Na⁺" unit="mmol/L" value={na} onChange={setNa} />
+        <Field label="Glucosa" unit="mg/dL" value={glu} onChange={setGlu} />
+        <Field label="BUN" unit="mg/dL" value={bun} onChange={setBun} />
+      </div>
+      <Result value={gap} unit="mOsm" tone={tone} interpretacion={txt} />
+      <p className="text-[11px] text-ink-400">Brecha = medida − calculada · &gt;10 → alcoholes tóxicos.</p>
+    </div>
+  )
+}
+
+function BaseExcessCalculator() {
+  const [be, setBe] = useState('')
+  const x = parseFloat(be)
+  const ok = !isNaN(x)
+  let tone = 'idle'
+  let txt = 'Introduce el exceso de base'
+  if (ok) {
+    if (x < -2) {
+      tone = 'terra'
+      txt = 'Componente de acidosis metabólica'
+    } else if (x > 2) {
+      tone = 'pearl'
+      txt = 'Componente de alcalosis metabólica'
+    } else {
+      tone = 'mint'
+      txt = 'Normal (−2 a +2)'
+    }
+  }
+  return (
+    <div className="grid gap-3">
+      <Field label="Exceso de base" unit="mmol/L" value={be} onChange={setBe} />
+      <Result value={ok ? x : null} unit="mmol/L" tone={tone} interpretacion={txt} />
+      <p className="text-[11px] text-ink-400">Normal −2 a +2 · negativo = acidosis metabólica.</p>
+    </div>
+  )
+}
+
+function BicarbDeficitCalculator() {
+  const [wt, setWt] = useState('')
+  const [act, setAct] = useState('')
+  const [obj, setObj] = useState('')
+  const w = parseFloat(wt)
+  const a = parseFloat(act)
+  const o = parseFloat(obj)
+  const ok = !isNaN(w) && !isNaN(a) && !isNaN(o)
+  const def = ok ? Math.round(0.5 * w * (o - a)) : null
+  return (
+    <div className="grid gap-3">
+      <div className="grid grid-cols-3 gap-3">
+        <Field label="Peso" unit="kg" value={wt} onChange={setWt} />
+        <Field label="HCO₃ actual" unit="mmol/L" value={act} onChange={setAct} />
+        <Field label="HCO₃ objetivo" unit="mmol/L" value={obj} onChange={setObj} />
+      </div>
+      <Result value={def} unit="mmol" tone={ok ? 'steel' : 'idle'} interpretacion={ok ? 'Déficit estimado de HCO₃' : 'Introduce peso, HCO₃ actual y objetivo'} />
+      <p className="text-[11px] text-ink-400">Déficit ≈ 0,5 × peso × (objetivo − actual) · reponer parcial y con cautela.</p>
+    </div>
+  )
+}
+
 const CALCS = {
   ppc: CppCalculator,
   lindegaard: LindegaardCalculator,
@@ -822,6 +1106,15 @@ const CALCS = {
   vtisv: VtiSvCalculator,
   cardiacoutput: CardiacOutputCalculator,
   svr: SvrCalculator,
+  aniongap: AnionGapCalculator,
+  correctedag: CorrectedAgCalculator,
+  deltaratio: DeltaRatioCalculator,
+  winter: WinterCalculator,
+  expectedcompensation: ExpectedCompensationCalculator,
+  osmolarity: OsmolarityCalculator,
+  osmolargap: OsmolarGapCalculator,
+  baseexcess: BaseExcessCalculator,
+  bicarbdeficit: BicarbDeficitCalculator,
 }
 
 function ToolCard({ icon, titulo, children }) {
